@@ -87,11 +87,11 @@ module.exports = function (api) {
 Core layout utilities:
 ```tsx
 <View
-  flex="1 center"        // Flex with center alignment
-  justify="between"      // Space-between
-  items="center"         // Center items
+  flex="1 center"       // Flex with center alignment
+  justify="between"     // Space-between
+  items="center"        // Center items
   p="4"                 // Padding
-  m="t-2"              // Margin top
+  m="t-2"               // Margin top
 />
 ```
 
@@ -161,11 +161,11 @@ React Native specific utilities:
 ### Typography
 ```tsx
 <Text
-  text="center"         // Text align
-  font="bold"          // Font weight
-  size="lg"            // Font size
-  color="gray-700"     // Text color
-  decoration="underline"// Text decoration
+  text="center"          // Text align
+  font="bold"            // Font weight
+  size="lg"              // Font size
+  color="gray-700"       // Text color
+  decoration="underline" // Text decoration
 />
 ```
 
@@ -343,6 +343,7 @@ const styles = StyleSheet.create({
 - [ ] Platform-Specific Styles
 
 ### Core Features
+- [ ] Unistyles Support ???
 - [ ] Custom Theme Support
 - [ ] Style Variants
 - [ ] Responsive Styles
@@ -368,5 +369,5 @@ Created by kubilay.
 
 ## Community & Support
 
-- [GitHub Issues](https://github.com/your-repo/issues)
-- [Discussions](https://github.com/your-repo/discussions)
+- [GitHub Issues](https://github.com/kubilaysalih/react-native-attributify/issues)
+- [Discussions](https://github.com/kubilaysalih/react-native-attributify/discussions)
