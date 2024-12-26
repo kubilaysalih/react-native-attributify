@@ -70,13 +70,13 @@ yarn add react-native-attributify
 
 ### Babel Configuration
 ```js
-const babelPlugin = require('react-native-attributify/babel');
+const attributify = require('react-native-attributify/babel');
 
 module.exports = function (api) {
   api.cache(true);
   return {
     presets: ['babel-preset-expo'],
-    plugins: [babelPlugin],
+    plugins: [attributify],
   };
 };
 ```
