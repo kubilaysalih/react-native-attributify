@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="attributify.png" alt="React Native Attributify" />
+  <img src="https://raw.githubusercontent.com/kubilaysalih/react-native-attributify/refs/heads/main/attributify.png" alt="React Native Attributify" />
 </p>
 
 # React Native Attributify [Alpha]
