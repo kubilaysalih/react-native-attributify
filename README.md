@@ -81,6 +81,52 @@ module.exports = function (api) {
 };
 ```
 
+## Configuration
+
+Create an `attributify.config.js` file in your project root:
+
+```ts
+const { nativePreset } = require('react-native-attributify/presets');
+
+const config = {
+  // Optional prefix for generated style names
+  prefix: 'myapp_',
+
+  // Presets to use
+  presets: [nativePreset()]
+};
+
+module.exports = config;
+```
+
+### Configuration Options
+
+#### `prefix`
+- Type: `string`
+- Default: `''`
+- Description: Prefix for generated style names in StyleSheet.create
+
+#### `presets`
+- Type: `Array`
+- Default: `[]`
+- Description: Array of presets to use. Built-in presets include:
+  - `nativePreset`: Core React Native styles
+  - `layoutPreset`: Flexbox and layout utilities
+
+#### Example with Multiple Presets
+```ts
+const { nativePreset, layoutPreset } = require('react-native-attributify/presets');
+
+const config = {
+  prefix: 'myapp_',
+  presets: [
+    nativePreset()
+  ]
+};
+
+module.exports = config;
+```
+
 ## Available Presets
 
 ### Layout Preset
