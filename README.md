@@ -412,6 +412,7 @@ MIT License
 ## Credits
 
 Created by kubilay.
+I would like to thank Uğur Tuncel for his hard work for this logo 🥳
 
 ## Community & Support
 
