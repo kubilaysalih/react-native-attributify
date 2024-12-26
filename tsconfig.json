@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "module": "CommonJS",
+    "esModuleInterop": true,
+    "target": "ESNext",
+    "sourceMap": true,
+    "lib": [
+      "ES2020"
+    ],
+    "moduleResolution": "node",
+    "strict": true,
+    "jsx": "react-native",
+    "outDir": "./dist",
+    "skipLibCheck": true
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}
