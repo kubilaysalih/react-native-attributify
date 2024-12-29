@@ -12,7 +12,7 @@ const parseSpacingValue = (value: string): StyleValue => {
 
   const num = Number(value)
   if (!isNaN(num)) {
-    return num * 4
+    return num
   }
 
   return value

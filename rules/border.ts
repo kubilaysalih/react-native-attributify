@@ -4,15 +4,18 @@ import { StyleValue, StyleObject, Pattern } from '../types/types'
 const borderStyles = ['solid', 'dashed', 'dotted', 'double', 'none']
 
 const parseBorderValue = (value: string): StyleValue => {
+  if (value.startsWith('r-')) {
+    const num = Number(value.slice(2))
+    return !isNaN(num) ? num : value
+  }
+
   const num = Number(value)
   if (!isNaN(num)) {
     return num
   }
-
   if (/^-?\d+(\.\d+)?(px|rem|em)$/.test(value)) {
     return value
   }
-
   return value
 }
 
@@ -21,6 +24,14 @@ const parseBorderString = (value: string): StyleObject => {
   const styles: StyleObject = {}
 
   parts.forEach(part => {
+    if (part.startsWith('r-')) {
+      const radius = parseBorderValue(part)
+      if (typeof radius === 'number') {
+        styles.borderRadius = radius
+      }
+      return
+    }
+
     if (part === 'rounded') {
       styles.borderRadius = 4
       return
@@ -31,13 +42,13 @@ const parseBorderString = (value: string): StyleObject => {
       return
     }
 
-    if (part.startsWith('#') || part.startsWith('rgb') || part.startsWith('rgba')) {
+    if (part.startsWith('#') || /^rgb/.test(part) || /^[a-zA-Z]+$/.test(part)) {
       styles.borderColor = part
       return
     }
 
     const width = parseBorderValue(part)
-    if (width) {
+    if (typeof width === 'number') {
       styles.borderWidth = width
     }
   })
@@ -46,46 +57,66 @@ const parseBorderString = (value: string): StyleObject => {
 }
 
 const borders: Pattern[] = [
-  [/^(?:border|b)="([^"]+)"$/, ([_, value]): StyleObject => {
+  [/^border=["']?(\d+(?:\.\d+)?(?:px|rem|em)?)["']?$/, ([_, value]): StyleObject => {
+    return { borderWidth: Number(value.replace(/px|rem|em/, '')) }
+  }],
+
+  [/^border=["']([^"']+)["']$/, ([_, value]): StyleObject => {
     return parseBorderString(value)
   }],
 
-  [/^(?:border|b)([trbl])="([^"]+)"$/, ([_, dir, value]): StyleObject => {
+  [/^b=["']?(\d+(?:\.\d+)?(?:px|rem|em)?)["']?$/, ([_, value]): StyleObject => {
+    return { borderWidth: Number(value.replace(/px|rem|em/, '')) }
+  }],
+
+  [/^b=["']([^"']+)["']$/, ([_, value]): StyleObject => {
+    return parseBorderString(value)
+  }],
+
+  [/^(?:border|b)([trbl])=["']?([^"']+)["']?$/, ([_, dir, value]): StyleObject => {
     const styles = parseBorderString(value)
     const directionStyles: StyleObject = {}
 
     Object.entries(styles).forEach(([key, val]) => {
-      switch(dir) {
+      switch (dir) {
         case 't':
           if (key === 'borderRadius') {
             directionStyles.borderTopLeftRadius = val
             directionStyles.borderTopRightRadius = val
-          } else {
-            directionStyles[`border${key.slice(6)}Top`] = val
+          } else if (key === 'borderWidth') {
+            directionStyles.borderTopWidth = val
+          } else if (key === 'borderColor') {
+            directionStyles.borderTopColor = val
           }
           break
         case 'r':
           if (key === 'borderRadius') {
             directionStyles.borderTopRightRadius = val
             directionStyles.borderBottomRightRadius = val
-          } else {
-            directionStyles[`border${key.slice(6)}Right`] = val
+          } else if (key === 'borderWidth') {
+            directionStyles.borderRightWidth = val
+          } else if (key === 'borderColor') {
+            directionStyles.borderRightColor = val
           }
           break
         case 'b':
           if (key === 'borderRadius') {
             directionStyles.borderBottomLeftRadius = val
             directionStyles.borderBottomRightRadius = val
-          } else {
-            directionStyles[`border${key.slice(6)}Bottom`] = val
+          } else if (key === 'borderWidth') {
+            directionStyles.borderBottomWidth = val
+          } else if (key === 'borderColor') {
+            directionStyles.borderBottomColor = val
           }
           break
         case 'l':
           if (key === 'borderRadius') {
             directionStyles.borderTopLeftRadius = val
             directionStyles.borderBottomLeftRadius = val
-          } else {
-            directionStyles[`border${key.slice(6)}Left`] = val
+          } else if (key === 'borderWidth') {
+            directionStyles.borderLeftWidth = val
+          } else if (key === 'borderColor') {
+            directionStyles.borderLeftColor = val
           }
           break
       }
@@ -94,16 +125,11 @@ const borders: Pattern[] = [
     return directionStyles
   }],
 
-  ['border', { borderWidth: 1 }],
-  ['b', { borderWidth: 1 }],
-
-  ['rounded', { borderRadius: 4 }],
-  ['rd', { borderRadius: 4 }],
-
   ...borderStyles.map(style => ([
     `border-${style}`,
     { borderStyle: style }
   ])) as Pattern[],
+
   ...borderStyles.map(style => ([
     `b-${style}`,
     { borderStyle: style }

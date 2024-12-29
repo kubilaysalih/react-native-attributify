@@ -53,8 +53,11 @@ export const processJSXElements = (
             ...styleProperty.value.properties,
             types.spreadElement(styleExpr)
           ])
-        } else {
-          styleProperty.value = styleExpr
+        } else if (types.isExpression(styleProperty.value)) {
+          styleProperty.value = types.arrayExpression([
+            styleProperty.value as t.Expression,
+            styleExpr
+          ])
         }
       } else {
         propsArg.properties.push(
@@ -74,6 +77,12 @@ export const processJSXElements = (
         (attr): attr is t.JSXAttribute => types.isJSXAttribute(attr)
       )
 
+      const existingStyleAttr = attributes.find(
+        attr => types.isJSXAttribute(attr) &&
+               types.isJSXIdentifier(attr.name) &&
+               attr.name.name === 'style'
+      )
+
       const newStyles = processAttributes(attributes, types, patterns)
       if (!newStyles) return
 
@@ -85,13 +94,25 @@ export const processJSXElements = (
         types.identifier(styleId)
       )
 
-      openingElement.attributes = [
-        ...openingElement.attributes,
-        types.jsxAttribute(
-          types.jsxIdentifier('style'),
-          types.jsxExpressionContainer(styleExpr)
+      if (existingStyleAttr && types.isJSXAttribute(existingStyleAttr)) {
+        if (existingStyleAttr.value &&
+            types.isJSXExpressionContainer(existingStyleAttr.value) &&
+            types.isExpression(existingStyleAttr.value.expression)) {
+          existingStyleAttr.value = types.jsxExpressionContainer(
+            types.arrayExpression([
+              existingStyleAttr.value.expression,
+              styleExpr
+            ])
+          )
+        }
+      } else {
+        openingElement.attributes.push(
+          types.jsxAttribute(
+            types.jsxIdentifier('style'),
+            types.jsxExpressionContainer(styleExpr)
+          )
         )
-      ]
+      }
     }
   })
 }

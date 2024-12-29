@@ -1,14 +1,6 @@
 export type SpacingValue =
   | number
   | string
-  | `${number}dp`
-  | `${number}%`
-  | `${number}vw`
-  | `${number}vh`
-  | `-${number}dp`
-  | `-${number}%`
-  | `-${number}vw`
-  | `-${number}vh`
 
 export type SpacingDirection = 'x' | 'y' | 't' | 'b' | 'l' | 'r'
 

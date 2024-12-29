@@ -5,7 +5,7 @@ import { checkStyleSheetExistence } from './utils/checkStyleSheetExistence'
 import { extractRelativePath } from './utils/extractRelativePath'
 import { generateStyleSheet } from './utils/generateStyleSheet'
 import { initializePatterns } from './utils/initializePatterns'
-import { ensureStyleSheetImport } from './utils/processImports'
+import { ensureStyleSheetImport } from './utils/ensureStyleSheetImport'
 import { processJSXElements } from './utils/processJSXElements'
 
 export default function (): PluginObj {

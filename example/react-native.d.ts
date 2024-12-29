@@ -1,11 +1,18 @@
 /* eslint-disable @typescript-eslint/no-empty-object-type */
+/**
+ * Native preset for development environment
+ */
 import 'react-native'
-import { FlexStyle } from '../../types/rules/flex'
-import { SizeStyle } from '../../types/rules/size'
-import { SpacingStyle } from '../../types/rules/spacing'
+import { AlignStyle } from '../types/rules/align.d'
+import { BorderStyle } from '../types/rules/border'
+import { ColorStyle } from '../types/rules/color'
+import { DecorationStyle } from '../types/rules/decoration'
+import { FlexStyle } from '../types/rules/flex'
+import { SizeStyle } from '../types/rules/size'
+import { SpacingStyle } from '../types/rules/spacing'
 
 declare module 'react-native' {
-  interface LayoutStyle extends FlexStyle, SizeStyle, SpacingStyle {}
+  interface LayoutStyle extends AlignStyle, BorderStyle, ColorStyle, DecorationStyle, FlexStyle, SizeStyle, SpacingStyle {}
 
   interface ViewStyle extends LayoutStyle {}
   interface ViewProps extends LayoutStyle {}
@@ -22,8 +29,7 @@ declare module 'react-native' {
 
   interface SafeAreaViewProps extends LayoutStyle {}
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  interface FlatListProps<T> extends LayoutStyle {}
+  interface FlatListProps extends LayoutStyle {}
 
   interface KeyboardAvoidingViewProps extends LayoutStyle {}
 

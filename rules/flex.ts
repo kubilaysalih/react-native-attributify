@@ -2,6 +2,16 @@
 import { Pattern, StyleObject } from '../types/types'
 
 const flex: Pattern[] = [
+  ['^flex$', { display: 'flex' }],
+  ['flex-1', { flex: 1 }],
+  ['flex-auto', { flex: 'auto' }],
+  ['flex-initial', { flex: '0 1 auto' }],
+  ['flex-none', { flex: 'none' }],
+
+  [/^flex-(.+)$/, ([, value]): StyleObject => ({
+    flex: isNaN(Number(value)) ? value : Number(value)
+  })],
+
   [/^flex="([^"]+)"$/, ([_, value]): StyleObject => {
     if (!value) return {}
 
@@ -10,11 +20,11 @@ const flex: Pattern[] = [
 
     parts.forEach(part => {
       if (!isNaN(Number(part))) {
-        styles.flexGrow = Number(part)
+        styles.flex = Number(part)
         return
       }
 
-      const specialValues: { [key: string]: StyleObject } = {
+      const specialValues: Record<string, StyleObject> = {
         'auto': { flex: '1 1 auto' },
         'none': { flex: 'none' },
         'initial': { flex: '0 1 auto' }
@@ -25,34 +35,19 @@ const flex: Pattern[] = [
         return
       }
 
-      const directions: { [key: string]: string } = {
-        'row': 'row',
-        'row-reverse': 'row-reverse',
-        'col': 'column',
-        'column': 'column',
-        'col-reverse': 'column-reverse',
-        'column-reverse': 'column-reverse'
-      }
-
-      if (directions[part]) {
-        styles.flexDirection = directions[part]
+      if (['row', 'row-reverse', 'column', 'col', 'col-reverse', 'column-reverse'].includes(part)) {
+        styles.flexDirection = part.replace('col', 'column')
         return
       }
 
-      const wraps: { [key: string]: string } = {
-        'wrap': 'wrap',
-        'wrap-reverse': 'wrap-reverse',
-        'nowrap': 'nowrap'
-      }
-
-      if (wraps[part]) {
-        styles.flexWrap = wraps[part]
+      if (['wrap', 'wrap-reverse', 'nowrap'].includes(part)) {
+        styles.flexWrap = part
         return
       }
 
       if (part.startsWith('justify-')) {
-        const justifyValue = part.replace('justify-', '')
-        const justifyMap: { [key: string]: string } = {
+        const value = part.replace('justify-', '')
+        const justifyMap: Record<string, string> = {
           'start': 'flex-start',
           'end': 'flex-end',
           'center': 'center',
@@ -60,62 +55,82 @@ const flex: Pattern[] = [
           'around': 'space-around',
           'evenly': 'space-evenly'
         }
-        if (justifyMap[justifyValue]) {
-          styles.justifyContent = justifyMap[justifyValue]
-        }
+        styles.justifyContent = justifyMap[value] || value
         return
       }
 
       if (part.startsWith('items-')) {
-        const itemsValue = part.replace('items-', '')
-        const itemsMap: { [key: string]: string } = {
+        const value = part.replace('items-', '')
+        const alignMap: Record<string, string> = {
           'start': 'flex-start',
           'end': 'flex-end',
           'center': 'center',
           'baseline': 'baseline',
           'stretch': 'stretch'
         }
-        if (itemsMap[itemsValue]) {
-          styles.alignItems = itemsMap[itemsValue]
-        }
+        styles.alignItems = alignMap[value] || value
         return
+      }
+
+      if (part.startsWith('content-')) {
+        const value = part.replace('content-', '')
+        const alignMap: Record<string, string> = {
+          'start': 'flex-start',
+          'end': 'flex-end',
+          'center': 'center',
+          'between': 'space-between',
+          'around': 'space-around',
+          'stretch': 'stretch'
+        }
+        styles.alignContent = alignMap[value] || value
+      }
+
+      if (part.startsWith('self-')) {
+        const value = part.replace('self-', '')
+        const alignMap: Record<string, string> = {
+          'start': 'flex-start',
+          'end': 'flex-end',
+          'center': 'center',
+          'stretch': 'stretch'
+        }
+        styles.alignSelf = alignMap[value] || value
       }
     })
 
     return styles
   }],
 
-  [/^(?:flex-)?basis-(.+)$/, ([, d]): StyleObject => {
-    const value = isNaN(Number(d)) ? d : Number(d)
-    return { flexBasis: value }
-  }],
-
-  [/^(?:flex-)?grow(?:-(.*))?$/, ([, d = '']): StyleObject => {
-    const value = d === '' ? 1 : Number(d)
-    return { flexGrow: value }
-  }],
-
-  [/^(?:flex-)?shrink(?:-(.*))?$/, ([, d = '']): StyleObject => {
-    const value = d === '' ? 1 : Number(d)
-    return { flexShrink: value }
-  }],
-
-  [/^flex-(.*)$/, ([, d]): StyleObject => ({ flex: d })],
-
-  ['^flex$', { display: 'flex' }],
-  ['inline-flex', { display: 'inline-flex' }],
-  ['flex-inline', { display: 'inline-flex' }],
-  ['flex-1', { flex: '1 1 0%' }],
-  ['flex-auto', { flex: '1 1 auto' }],
-  ['flex-initial', { flex: '0 1 auto' }],
-  ['flex-none', { flex: 'none' }],
   ['flex-row', { flexDirection: 'row' }],
   ['flex-row-reverse', { flexDirection: 'row-reverse' }],
   ['flex-col', { flexDirection: 'column' }],
   ['flex-col-reverse', { flexDirection: 'column-reverse' }],
+
   ['flex-wrap', { flexWrap: 'wrap' }],
   ['flex-wrap-reverse', { flexWrap: 'wrap-reverse' }],
-  ['flex-nowrap', { flexWrap: 'nowrap' }]
+  ['flex-nowrap', { flexWrap: 'nowrap' }],
+
+  [/^justify-(.+)$/, ([, value]): StyleObject => {
+    const justifyMap: Record<string, string> = {
+      'start': 'flex-start',
+      'end': 'flex-end',
+      'center': 'center',
+      'between': 'space-between',
+      'around': 'space-around',
+      'evenly': 'space-evenly'
+    }
+    return { justifyContent: justifyMap[value] || value }
+  }],
+
+  [/^items-(.+)$/, ([, value]): StyleObject => {
+    const alignMap: Record<string, string> = {
+      'start': 'flex-start',
+      'end': 'flex-end',
+      'center': 'center',
+      'baseline': 'baseline',
+      'stretch': 'stretch'
+    }
+    return { alignItems: alignMap[value] || value }
+  }]
 ]
 
 export default flex

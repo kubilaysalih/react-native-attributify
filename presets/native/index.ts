@@ -4,9 +4,9 @@ import border from '../../rules/border'
 import color from '../../rules/color'
 import decoration from '../../rules/decoration'
 import flex from '../../rules/flex'
-import position from '../../rules/position'
 import size from '../../rules/size'
 import spacing from '../../rules/spacing'
+import text from '../../rules/text'
 
 export function nativePreset(): Pattern[] {
   return [
@@ -15,8 +15,8 @@ export function nativePreset(): Pattern[] {
     ...color,
     ...decoration,
     ...flex,
-    ...position,
     ...size,
-    ...spacing
+    ...spacing,
+    ...text
   ]
 }

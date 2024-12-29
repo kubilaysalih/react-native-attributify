@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Pattern, StyleObject } from '../types/types'
-import { isTextAlignValue } from './align'
 
 const isValidColorValue = (value: string): boolean => {
   if (!value || value.trim() === '') return false
@@ -29,33 +28,24 @@ const isValidColorValue = (value: string): boolean => {
 }
 
 const color: Pattern[] = [
+  ['color', ([, value]): StyleObject => {
+    if (!value) return {}
+    if (isValidColorValue(value)) {
+      return { color: value }
+    }
+    return {}
+  }],
+
   ['text', ([, value]): StyleObject => {
-    if (!value) return {} as StyleObject
-    const styles = {} as StyleObject
-    const values: string[] = value.toLowerCase().trim().split(/\s+/)
-
-    values.forEach(val => {
-      if (isTextAlignValue(val)) {
-        styles.textAlign = val
-      } else if (isValidColorValue(val)) {
-        styles.color = val
-      }
-    })
-
-    return styles
+    if (!value) return {}
+    if (isValidColorValue(value)) {
+      return { color: value }
+    }
+    return {}
   }],
-
-  [/^text-([a-z][a-z0-9-]*)$/, ([, color]): StyleObject => {
-    if (isTextAlignValue(color) || !isValidColorValue(color)) return {} as StyleObject
-    return { color }
-  }],
-
-  [/^bg-([a-z][a-z0-9-]*)$/, ([, color]): StyleObject =>
-    isValidColorValue(color) ? { backgroundColor: color } : ({} as StyleObject)
-  ],
 
   ['bg', ([, value]): StyleObject =>
-    value && isValidColorValue(value) ? { backgroundColor: value } : ({} as StyleObject)
+    value && isValidColorValue(value) ? { backgroundColor: value } : {}
   ],
 
   [/^opacity-(\d+)$/, ([, value]): StyleObject => ({

@@ -4,6 +4,7 @@ export type SizeValue =
   | 'screen'
   | 'half'
   | 'auto'
+  | `${number}`
   | `${number}%`
   | `${number}px`
   | `${number}rem`

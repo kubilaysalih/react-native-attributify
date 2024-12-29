@@ -5,18 +5,18 @@
     "esModuleInterop": true,
     "target": "ESNext",
     "sourceMap": true,
-    "lib": [
-      "ES2020"
-    ],
+    "lib": ["ES2020"],
     "moduleResolution": "node",
     "strict": true,
     "jsx": "react-native",
     "outDir": "./dist",
+    "composite": true,
     "skipLibCheck": true
   },
   "include": [
     "**/*.ts",
-    "**/*.tsx"
+    "**/*.tsx",
+    "presets/native/types.d.ts"
   ],
   "exclude": [
     "node_modules",

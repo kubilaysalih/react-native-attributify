@@ -1,8 +1,8 @@
 {
   "name": "react-native-attributify",
-  "version": "0.1.0-alpha.3",
+  "version": "0.1.0-alpha.4",
   "description": "react-native-attributify like nativewind and unocss with attributes",
-  "main": "dist/index.js",
+  "main": "dist/index.ts",
   "types": "dist/index.d.ts",
   "author": "kubilay salih",
   "license": "MIT",

@@ -147,7 +147,6 @@ React Native specific utilities:
 <View
   bg="white"           // Background color
   rounded="lg"         // Border radius
-  shadow="lg"          // Shadow
   opacity="75"         // Opacity
 />
 ```
@@ -175,7 +174,6 @@ React Native specific utilities:
   m="4"                // All sides margin
   mt="4"               // Top margin
   mb="2"               // Bottom margin
-  gap="2"              // Gap between children
 />
 ```
 

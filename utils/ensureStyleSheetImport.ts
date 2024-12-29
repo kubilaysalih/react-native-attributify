@@ -1,27 +1,26 @@
-import { NodePath, types as t, types } from '@babel/core'
+import { NodePath, types as t } from '@babel/core'
 
 export const ensureStyleSheetImport = (
   path: NodePath<t.Program>,
-  t: typeof types
+  types: typeof t
 ): boolean => {
   const hasStyleSheetImport = path.node.body.some(node =>
-    t.isImportDeclaration(node) &&
+    types.isImportDeclaration(node) &&
     node.source.value === 'react-native' &&
     node.specifiers.some(spec =>
-      t.isImportSpecifier(spec) &&
-      t.isIdentifier(spec.imported) &&
+      types.isImportSpecifier(spec) &&
+      types.isIdentifier(spec.imported) &&
       spec.imported.name === 'StyleSheet'
     )
   )
 
   if (!hasStyleSheetImport) {
     path.node.body.unshift(
-      t.importDeclaration(
-        [t.importSpecifier(t.identifier('StyleSheet'), t.identifier('StyleSheet'))],
-        t.stringLiteral('react-native')
+      types.importDeclaration(
+        [types.importSpecifier(types.identifier('StyleSheet'), types.identifier('StyleSheet'))],
+        types.stringLiteral('react-native')
       )
     )
-
     return true
   }
 
