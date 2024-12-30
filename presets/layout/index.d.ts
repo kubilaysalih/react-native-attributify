@@ -22,8 +22,7 @@ declare module 'react-native' {
 
   interface SafeAreaViewProps extends LayoutStyle {}
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  interface FlatListProps<T> extends LayoutStyle {}
+  interface FlatListProps extends LayoutStyle {}
 
   interface KeyboardAvoidingViewProps extends LayoutStyle {}
 
