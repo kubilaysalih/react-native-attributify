@@ -6,6 +6,8 @@ import AlignScreen from './screens/align'
 import TextScreen from './screens/text'
 import BorderScreen from './screens/border'
 import PositionScreen from './screens/position'
+import SpacingScreen from './screens/spacing'
+import SizeScreen from './screens/size'
 
 type RootStackParamList = {
   Home: undefined;
@@ -14,13 +16,15 @@ type RootStackParamList = {
   Text: undefined;
   Border: undefined
   Position: undefined
+  Spacing: undefined
+  Size: undefined
 }
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>
 
-const screens = ['Flex', 'Align', 'Text', 'Border', 'Position'] as const
+const screens = ['Flex', 'Align', 'Text', 'Border', 'Position', 'Spacing', 'Size'] as const
 
 type ScreenName = typeof screens[number]
 
@@ -65,6 +69,8 @@ const App = () => {
         <Stack.Screen name="Text" component={TextScreen} />
         <Stack.Screen name="Border" component={BorderScreen} />
         <Stack.Screen name="Position" component={PositionScreen} />
+        <Stack.Screen name="Spacing" component={SpacingScreen} />
+        <Stack.Screen name="Size" component={SizeScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   )
