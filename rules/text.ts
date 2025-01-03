@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import { Pattern, StyleObject, StyleValue } from '../types/types'
 
 const weightMap: Record<string, string> = {
@@ -64,7 +64,10 @@ const parseTextStyle = (value: string): StyleObject => {
 }
 
 const text: Pattern[] = [
-  [/^text="([^"]+)"$/, ([_, value]): StyleObject => parseTextStyle(value)]
+  ['text', ([, value]): StyleObject => {
+    if (!value) return {}
+    return parseTextStyle(value)
+  }]
 ]
 
 export default text

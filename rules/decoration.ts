@@ -58,7 +58,7 @@ const parseTextStyle = (value: string): StyleObject => {
 }
 
 const textDecorations: Pattern[] = [
-  [/^text="([^"]+)"$/, ([_, value]): StyleObject => parseTextStyle(value)]
+  ['text', ([_, value]): StyleObject => parseTextStyle(value)]
 ]
 
 export default textDecorations

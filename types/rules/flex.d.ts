@@ -1,3 +1,5 @@
+export type GapValue = number | string
+
 export type JustifyContentValue =
   | 'start'
   | 'end'
@@ -43,4 +45,10 @@ export interface FlexStyle {
   grow?: FlexNumberValue;
   shrink?: FlexNumberValue;
   basis?: FlexNumberValue | 'auto';
+
+  gap?: GapValue;
+  'gap-x'?: GapValue;
+  'gap-y'?: GapValue;
+  'column-gap'?: GapValue;
+  'row-gap'?: GapValue;
 }

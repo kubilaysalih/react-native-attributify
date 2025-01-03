@@ -57,23 +57,109 @@ const parseBorderString = (value: string): StyleObject => {
 }
 
 const borders: Pattern[] = [
-  [/^border=["']?(\d+(?:\.\d+)?(?:px|rem|em)?)["']?$/, ([_, value]): StyleObject => {
-    return { borderWidth: Number(value.replace(/px|rem|em/, '')) }
-  }],
-
-  [/^border=["']([^"']+)["']$/, ([_, value]): StyleObject => {
+  ['b', ([_, value]): StyleObject => {
+    if (!value) return {}
     return parseBorderString(value)
   }],
 
-  [/^b=["']?(\d+(?:\.\d+)?(?:px|rem|em)?)["']?$/, ([_, value]): StyleObject => {
-    return { borderWidth: Number(value.replace(/px|rem|em/, '')) }
-  }],
-
-  [/^b=["']([^"']+)["']$/, ([_, value]): StyleObject => {
+  ['border', ([_, value]): StyleObject => {
+    if (!value) return {}
     return parseBorderString(value)
   }],
 
-  [/^(?:border|b)([trbl])=["']?([^"']+)["']?$/, ([_, dir, value]): StyleObject => {
+  [/^border-(\d+(?:\.\d+)?(?:px|rem|em)?)$/, ([_, value]): StyleObject => {
+    return { borderWidth: Number(value.replace(/px|rem|em/, '')) }
+  }],
+
+  [/^border-([^"']+)$/, ([_, value]): StyleObject => {
+    return parseBorderString(value)
+  }],
+
+  [/^b-(\d+(?:\.\d+)?(?:px|rem|em)?)$/, ([_, value]): StyleObject => {
+    return { borderWidth: Number(value.replace(/px|rem|em/, '')) }
+  }],
+
+  [/^b-([^"']+)$/, ([_, value]): StyleObject => {
+    return parseBorderString(value)
+  }],
+
+  ['bt', ([_, value]): StyleObject => {
+    if (!value) return {}
+    const styles = parseBorderString(value)
+    const directionStyles: StyleObject = {}
+
+    Object.entries(styles).forEach(([key, val]) => {
+      if (key === 'borderRadius') {
+        directionStyles.borderTopLeftRadius = val
+        directionStyles.borderTopRightRadius = val
+      } else if (key === 'borderWidth') {
+        directionStyles.borderTopWidth = val
+      } else if (key === 'borderColor') {
+        directionStyles.borderTopColor = val
+      }
+    })
+
+    return directionStyles
+  }],
+
+  ['br', ([_, value]): StyleObject => {
+    if (!value) return {}
+    const styles = parseBorderString(value)
+    const directionStyles: StyleObject = {}
+
+    Object.entries(styles).forEach(([key, val]) => {
+      if (key === 'borderRadius') {
+        directionStyles.borderTopRightRadius = val
+        directionStyles.borderBottomRightRadius = val
+      } else if (key === 'borderWidth') {
+        directionStyles.borderRightWidth = val
+      } else if (key === 'borderColor') {
+        directionStyles.borderRightColor = val
+      }
+    })
+
+    return directionStyles
+  }],
+
+  ['bb', ([_, value]): StyleObject => {
+    if (!value) return {}
+    const styles = parseBorderString(value)
+    const directionStyles: StyleObject = {}
+
+    Object.entries(styles).forEach(([key, val]) => {
+      if (key === 'borderRadius') {
+        directionStyles.borderBottomLeftRadius = val
+        directionStyles.borderBottomRightRadius = val
+      } else if (key === 'borderWidth') {
+        directionStyles.borderBottomWidth = val
+      } else if (key === 'borderColor') {
+        directionStyles.borderBottomColor = val
+      }
+    })
+
+    return directionStyles
+  }],
+
+  ['bl', ([_, value]): StyleObject => {
+    if (!value) return {}
+    const styles = parseBorderString(value)
+    const directionStyles: StyleObject = {}
+
+    Object.entries(styles).forEach(([key, val]) => {
+      if (key === 'borderRadius') {
+        directionStyles.borderTopLeftRadius = val
+        directionStyles.borderBottomLeftRadius = val
+      } else if (key === 'borderWidth') {
+        directionStyles.borderLeftWidth = val
+      } else if (key === 'borderColor') {
+        directionStyles.borderLeftColor = val
+      }
+    })
+
+    return directionStyles
+  }],
+
+  [/^(?:border|b)([trbl])-([^"']+)$/, ([_, dir, value]): StyleObject => {
     const styles = parseBorderString(value)
     const directionStyles: StyleObject = {}
 

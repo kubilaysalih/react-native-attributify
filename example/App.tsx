@@ -5,6 +5,7 @@ import FlexScreen from './screens/flex'
 import AlignScreen from './screens/align'
 import TextScreen from './screens/text'
 import BorderScreen from './screens/border'
+import PositionScreen from './screens/position'
 
 type RootStackParamList = {
   Home: undefined;
@@ -12,13 +13,14 @@ type RootStackParamList = {
   Align: undefined;
   Text: undefined;
   Border: undefined
+  Position: undefined
 }
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>
 
-const screens = ['Flex', 'Align', 'Text', 'Border'] as const
+const screens = ['Flex', 'Align', 'Text', 'Border', 'Position'] as const
 
 type ScreenName = typeof screens[number]
 
@@ -62,6 +64,7 @@ const App = () => {
         <Stack.Screen name="Align" component={AlignScreen} />
         <Stack.Screen name="Text" component={TextScreen} />
         <Stack.Screen name="Border" component={BorderScreen} />
+        <Stack.Screen name="Position" component={PositionScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   )

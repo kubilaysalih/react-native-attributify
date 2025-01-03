@@ -12,7 +12,19 @@ const flex: Pattern[] = [
     flex: isNaN(Number(value)) ? value : Number(value)
   })],
 
-  [/^flex="([^"]+)"$/, ([_, value]): StyleObject => {
+  [/^gap-(\d+)$/, ([, value]): StyleObject => ({
+    gap: Number(value)
+  })],
+
+  [/^gap-x-(\d+)$/, ([, value]): StyleObject => ({
+    columnGap: Number(value)
+  })],
+
+  [/^gap-y-(\d+)$/, ([, value]): StyleObject => ({
+    rowGap: Number(value)
+  })],
+
+  ['flex', ([_, value]): StyleObject => {
     if (!value) return {}
 
     const parts: string[] = value.split(' ')
@@ -42,6 +54,22 @@ const flex: Pattern[] = [
 
       if (['wrap', 'wrap-reverse', 'nowrap'].includes(part)) {
         styles.flexWrap = part
+        return
+      }
+
+      if (part.startsWith('gap-')) {
+        const [, direction, size] = part.match(/^gap-(x|y)?-?(\d+)$/) || []
+        const value = Number(size)
+
+        if (!isNaN(value)) {
+          if (direction === 'x') {
+            styles.columnGap = value
+          } else if (direction === 'y') {
+            styles.rowGap = value
+          } else {
+            styles.gap = value
+          }
+        }
         return
       }
 

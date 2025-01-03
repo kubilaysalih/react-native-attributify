@@ -7,9 +7,9 @@ export default function FlexScreen() {
         {/* Basic Row Layout */}
         <View p="16" mb="16">
           <Text text="18 bold" mb="12">
-            Basic Row Layout
+            Basic Direction
           </Text>
-          <View bg="#f5f5f5" p="16">
+          <View bg="#f5f5f5" p="16" mb="2">
             <View flex-row>
               <View bg="#4a90e2" p="16" m="4">
                 <Text text="white">1</Text>
@@ -23,6 +23,74 @@ export default function FlexScreen() {
             </View>
             <Text mt="2">
               {'<View flex-row>'}
+            </Text>
+          </View>
+
+          <View bg="#f5f5f5" p="16" mb="2">
+            <View flex="row">
+              <View bg="#4a90e2" p="16" m="4">
+                <Text text="white">1</Text>
+              </View>
+              <View bg="#4a90e2" p="16" m="4">
+                <Text text="white">2</Text>
+              </View>
+              <View bg="#4a90e2" p="16" m="4">
+                <Text text="white">3</Text>
+              </View>
+            </View>
+            <Text mt="2">
+              {'<View flex="row">'}
+            </Text>
+          </View>
+
+          <View bg="#f5f5f5" p="16" mb="2">
+            <View flex="row-reverse">
+              <View bg="#4a90e2" p="16" m="4">
+                <Text text="white">1</Text>
+              </View>
+              <View bg="#4a90e2" p="16" m="4">
+                <Text text="white">2</Text>
+              </View>
+              <View bg="#4a90e2" p="16" m="4">
+                <Text text="white">3</Text>
+              </View>
+            </View>
+            <Text mt="2">
+              {'<View flex="row-reverse">'}
+            </Text>
+          </View>
+
+          <View bg="#f5f5f5" p="16" mb="2">
+            <View flex="col">
+              <View bg="#4a90e2" p="16" m="4">
+                <Text text="white">1</Text>
+              </View>
+              <View bg="#4a90e2" p="16" m="4">
+                <Text text="white">2</Text>
+              </View>
+              <View bg="#4a90e2" p="16" m="4">
+                <Text text="white">3</Text>
+              </View>
+            </View>
+            <Text mt="2">
+              {'<View flex="col">'}
+            </Text>
+          </View>
+
+          <View bg="#f5f5f5" p="16" mb="2">
+            <View flex="col-reverse">
+              <View bg="#4a90e2" p="16" m="4">
+                <Text text="white">1</Text>
+              </View>
+              <View bg="#4a90e2" p="16" m="4">
+                <Text text="white">2</Text>
+              </View>
+              <View bg="#4a90e2" p="16" m="4">
+                <Text text="white">3</Text>
+              </View>
+            </View>
+            <Text mt="2">
+              {'<View flex="col-reverse">'}
             </Text>
           </View>
         </View>
@@ -47,6 +115,20 @@ export default function FlexScreen() {
           </View>
 
           <View bg="#f5f5f5" p="16" mb="2">
+            <View flex="row justify-center">
+              <View bg="#4a90e2" p="16" m="4">
+                <Text text="white">1</Text>
+              </View>
+              <View bg="#4a90e2" p="16" m="4">
+                <Text text="white">2</Text>
+              </View>
+            </View>
+            <Text mt="8">
+              {'<View flex="row justify-center">'}
+            </Text>
+          </View>
+
+          <View bg="#f5f5f5" p="16" mb="2">
             <View flex-row justify-center>
               <View bg="#4a90e2" p="16" m="4">
                 <Text text="white">1</Text>
@@ -60,7 +142,7 @@ export default function FlexScreen() {
             </Text>
           </View>
 
-          <View bg="#f5f5f5" p="16">
+          <View bg="#f5f5f5" p="16" mb="2">
             <View flex-row justify-end>
               <View bg="#4a90e2" p="16" m="4">
                 <Text text="white">1</Text>
@@ -71,6 +153,20 @@ export default function FlexScreen() {
             </View>
             <Text mt="8">
               {'<View flex-row justify-end>'}
+            </Text>
+          </View>
+
+          <View bg="#f5f5f5" p="16" mb="2">
+            <View flex="row justify-end">
+              <View bg="#4a90e2" p="16" m="4">
+                <Text text="white">1</Text>
+              </View>
+              <View bg="#4a90e2" p="16" m="4">
+                <Text text="white">2</Text>
+              </View>
+            </View>
+            <Text mt="8">
+              {'<View flex="row justify-end">'}
             </Text>
           </View>
         </View>
@@ -95,6 +191,20 @@ export default function FlexScreen() {
           </View>
 
           <View bg="#f5f5f5" p="16" mb="2">
+            <View flex="row items-start" h="100">
+              <View bg="#4a90e2" p="16" m="4">
+                <Text text="white">1</Text>
+              </View>
+              <View bg="#4a90e2" p="16" m="4">
+                <Text text="white">2</Text>
+              </View>
+            </View>
+            <Text mt="8">
+              {'<View flex="row items-start">'}
+            </Text>
+          </View>
+
+          <View bg="#f5f5f5" p="16" mb="2">
             <View flex-row items-center h="100">
               <View bg="#4a90e2" p="16" m="4">
                 <Text text="white">1</Text>
@@ -109,6 +219,20 @@ export default function FlexScreen() {
           </View>
 
           <View bg="#f5f5f5" p="16" mb="2">
+            <View flex="row items-center" h="100">
+              <View bg="#4a90e2" p="16" m="4">
+                <Text text="white">1</Text>
+              </View>
+              <View bg="#4a90e2" p="16" m="4">
+                <Text text="white">2</Text>
+              </View>
+            </View>
+            <Text mt="8">
+              {'<View flex="row items-center">'}
+            </Text>
+          </View>
+
+          <View bg="#f5f5f5" p="16" mb="2">
             <View flex-row items-end h="100">
               <View bg="#4a90e2" p="16" m="4">
                 <Text text="white">1</Text>
@@ -119,6 +243,20 @@ export default function FlexScreen() {
             </View>
             <Text mt="8">
               {'<View flex-row items-end>'}
+            </Text>
+          </View>
+
+          <View bg="#f5f5f5" p="16" mb="2">
+            <View flex="row items-end" h="100">
+              <View bg="#4a90e2" p="16" m="4">
+                <Text text="white">1</Text>
+              </View>
+              <View bg="#4a90e2" p="16" m="4">
+                <Text text="white">2</Text>
+              </View>
+            </View>
+            <Text mt="8">
+              {'<View flex="row items-end">'}
             </Text>
           </View>
         </View>
@@ -143,6 +281,39 @@ export default function FlexScreen() {
           </View>
         </View>
 
+        {/* Gap */}
+        <View p="16">
+          <Text text="18 bold" mb="12">
+            Gap
+          </Text>
+          <View bg="#f5f5f5" p="16" mb="2">
+            <View flex="row gap-8">
+              <View bg="#4a90e2" p="16">
+                <Text text="white">Left</Text>
+              </View>
+              <View bg="#4a90e2" p="16">
+                <Text text="white">Right</Text>
+              </View>
+            </View>
+            <Text mt="8">
+              {'<View flex="row gap-8">'}
+            </Text>
+          </View>
+          <View bg="#f5f5f5" p="16" mb="2">
+            <View flex="row" gap="16">
+              <View bg="#4a90e2" p="16">
+                <Text text="white">Left</Text>
+              </View>
+              <View bg="#4a90e2" p="16">
+                <Text text="white">Right</Text>
+              </View>
+            </View>
+            <Text mt="8">
+              {'<View flex="row" gap="16">'}
+            </Text>
+          </View>
+        </View>
+
         {/* Common Layouts */}
         <View p="16">
           <Text text="18 bold" mb="12">
@@ -159,6 +330,48 @@ export default function FlexScreen() {
             </View>
             <Text mt="8">
               {'<View flex-row items-center justify-between>'}
+            </Text>
+          </View>
+
+          <View bg="#f5f5f5" p="16" mb="2">
+            <View flex="row items-center justify-between">
+              <View bg="#4a90e2" p="16">
+                <Text text="white">Left</Text>
+              </View>
+              <View bg="#4a90e2" p="16">
+                <Text text="white">Right</Text>
+              </View>
+            </View>
+            <Text mt="8">
+              {'<View flex="row items-center justify-between">'}
+            </Text>
+          </View>
+
+          <View bg="#f5f5f5" p="16" mb="2">
+            <View flex="row items-center justify-center">
+              <View bg="#4a90e2" p="16">
+                <Text text="white">Left</Text>
+              </View>
+              <View bg="#4a90e2" p="16">
+                <Text text="white">Right</Text>
+              </View>
+            </View>
+            <Text mt="8">
+              {'<View flex="row items-center justify-center">'}
+            </Text>
+          </View>
+
+          <View bg="#f5f5f5" p="16" mb="2">
+            <View flex="row items-center justify-around">
+              <View bg="#4a90e2" p="16">
+                <Text text="white">Left</Text>
+              </View>
+              <View bg="#4a90e2" p="16">
+                <Text text="white">Right</Text>
+              </View>
+            </View>
+            <Text mt="8">
+              {'<View flex="row items-center justify-around">'}
             </Text>
           </View>
         </View>

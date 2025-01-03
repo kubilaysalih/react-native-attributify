@@ -7,6 +7,7 @@ import flex from '../../rules/flex'
 import size from '../../rules/size'
 import spacing from '../../rules/spacing'
 import text from '../../rules/text'
+import position from '../../rules/position'
 
 export function nativePreset(): Pattern[] {
   return [
@@ -17,6 +18,7 @@ export function nativePreset(): Pattern[] {
     ...flex,
     ...size,
     ...spacing,
-    ...text
+    ...text,
+    ...position
   ]
 }
