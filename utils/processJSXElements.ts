@@ -50,10 +50,7 @@ export const processJSXElements = (
               types
             )
             if (conditionalStyle) {
-              combinedStyleExpr = types.objectExpression([
-                ...combinedStyleExpr.properties,
-                types.spreadElement(conditionalStyle)
-              ])
+              combinedStyleExpr.properties.push(...conditionalStyle.properties)
             }
           }
 
@@ -80,12 +77,7 @@ export const processJSXElements = (
         types.identifier(styleId)
       )
 
-      manageStyleAttribute(
-        attributes,
-        types.objectExpression([types.spreadElement(styleExpr)]),
-        types,
-        openingElement
-      )
+      manageStyleAttribute(attributes, styleExpr, types, openingElement)
     }
   })
 }
