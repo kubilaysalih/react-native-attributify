@@ -20,7 +20,6 @@ export interface BorderStyle {
   'border-b'?: BorderPropValue
   'border-l'?: BorderPropValue
 
-  rounded?: BorderPropValue
   rd?: BorderPropValue
   'border-radius'?: BorderPropValue
   'rounded-t'?: BorderPropValue

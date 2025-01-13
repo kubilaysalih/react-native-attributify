@@ -8,6 +8,7 @@ import size from '../../rules/size'
 import spacing from '../../rules/spacing'
 import text from '../../rules/text'
 import position from '../../rules/position'
+import transform from '../../rules/transform'
 
 export function nativePreset(): Pattern[] {
   return [
@@ -19,6 +20,7 @@ export function nativePreset(): Pattern[] {
     ...size,
     ...spacing,
     ...text,
-    ...position
+    ...position,
+    ...transform
   ]
 }

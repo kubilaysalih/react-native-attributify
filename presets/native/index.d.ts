@@ -8,10 +8,11 @@ import { FlexStyle } from '../../types/rules/flex'
 import { SizeStyle } from '../../types/rules/size'
 import { SpacingStyle } from '../../types/rules/spacing'
 import { PositionStyle } from '../../types/rules/position'
+import { TransformStyle } from '../../types/rules/transform'
 import { TextStyle as AttributifyTextStyle } from '../../types/rules/text'
 
 declare module 'react-native' {
-  interface LayoutStyle extends AlignStyle, BorderStyle, ColorStyle, DecorationStyle, FlexStyle, SizeStyle, SpacingStyle, PositionStyle, AttributifyTextStyle {}
+  interface LayoutStyle extends AlignStyle, BorderStyle, ColorStyle, DecorationStyle, FlexStyle, SizeStyle, SpacingStyle, PositionStyle, AttributifyTextStyle, TransformStyle {}
 
   interface ViewStyle extends LayoutStyle {}
   interface ViewProps extends LayoutStyle {}

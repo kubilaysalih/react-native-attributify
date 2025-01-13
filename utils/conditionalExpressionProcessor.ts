@@ -63,13 +63,7 @@ const createConditionalStyleObject = (
   ])]
 
   const styleProperties = styleKeys
-    .map(key => createStyleProperty(
-      key,
-      consequentStyle[key],
-      alternateStyle[key],
-      test,
-      types
-    ))
+    .map(key => createStyleProperty(key, consequentStyle, alternateStyle, test, types))
     .filter((prop): prop is t.ObjectProperty => prop !== null)
 
   return types.objectExpression(styleProperties)
@@ -77,12 +71,13 @@ const createConditionalStyleObject = (
 
 const createStyleProperty = (
   key: string,
-  consequentValue: string | number | undefined,
-  alternateValue: string | number | undefined,
+  consequentStyle: StyleObject,
+  alternateStyle: StyleObject,
   test: t.Expression,
   types: typeof t
 ): t.ObjectProperty | null => {
-  if (!key) return null
+  const consequentValue = consequentStyle[key]
+  const alternateValue = alternateStyle[key]
 
   if (typeof consequentValue === 'number' && typeof alternateValue === 'number') {
     return types.objectProperty(

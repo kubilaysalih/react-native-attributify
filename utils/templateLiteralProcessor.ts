@@ -80,12 +80,8 @@ const addConditionalProperties = (
           types.stringLiteral(key),
           types.conditionalExpression(
             expr.test,
-            typeof consequentValue === 'number'
-              ? types.numericLiteral(consequentValue)
-              : types.stringLiteral(consequentValue),
-            typeof alternateValue === 'number'
-              ? types.numericLiteral(alternateValue)
-              : types.stringLiteral(alternateValue)
+            createValueExpression(consequentValue, types),
+            createValueExpression(alternateValue, types)
           )
         )
       )
@@ -93,4 +89,16 @@ const addConditionalProperties = (
   })
 
   return combinedStyleExpr
+}
+
+const createValueExpression = (value: unknown, types: typeof t): t.Expression => {
+  if (typeof value === 'number') {
+    return types.numericLiteral(value)
+  }
+
+  if (typeof value === 'string') {
+    return types.stringLiteral(value)
+  }
+
+  return types.stringLiteral('')
 }

@@ -32,11 +32,6 @@ const parseBorderString = (value: string): StyleObject => {
       return
     }
 
-    if (part === 'rounded') {
-      styles.borderRadius = 4
-      return
-    }
-
     if (borderStyles.includes(part)) {
       styles.borderStyle = part
       return

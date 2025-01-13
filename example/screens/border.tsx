@@ -77,9 +77,6 @@ export default function BorderScreen() {
               <View b="2" r-8 bg="white" p="16" m="4">
                 <Text>r-8</Text>
               </View>
-              <View b="2 rounded" bg="white" p="16" m="4">
-                <Text>rounded</Text>
-              </View>
             </View>
           </View>
         </View>
@@ -131,8 +128,8 @@ export default function BorderScreen() {
           </Text>
           <View bg="#f5f5f5" p="16">
             <View flex-row flex-wrap>
-              <View b="rounded #eaeaea 2" bg="white" p="16" m="4">
-                <Text>b="rounded #eaeaea 2"</Text>
+              <View b="#eaeaea 2" bg="white" p="16" m="4">
+                <Text>b="#eaeaea 2"</Text>
               </View>
               <View b="r-4 #4a90e2 2 dashed" bg="white" p="16" m="4">
                 <Text>b="r-4 #4a90e2 2 dashed"</Text>
