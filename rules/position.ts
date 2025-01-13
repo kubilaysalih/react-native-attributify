@@ -7,15 +7,11 @@ export type PositionValue =
   | 'static'
 
 const position: Pattern[] = [
-  [/^position-(.+)$/, ([, value]): StyleObject => ({
+  [/^pos-(.+)$/, ([, value]): StyleObject => ({
     position: value as PositionValue
   })],
 
-  ['absolute', { position: 'absolute' }],
-  ['relative', { position: 'relative' }],
-  ['static', { position: 'static' }],
-
-  ['position', ([_, value]): StyleObject => {
+  ['pos', ([_, value]): StyleObject => {
     if (!value) return {}
     return { position: value as PositionValue }
   }],

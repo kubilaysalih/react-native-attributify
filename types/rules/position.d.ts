@@ -6,7 +6,7 @@ export type PositionValue =
 export type InsetValue = number | string
 
 export interface PositionStyle {
-  position?: PositionValue;
+  pos?: PositionValue;
   top?: number | string;
   right?: number | string;
   bottom?: number | string;
