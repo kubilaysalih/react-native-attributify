@@ -49,7 +49,7 @@ const Home = () => {
               justify-center
               onPress={() => navigation.navigate(item)}
             >
-              <Text text="20">{item}</Text>
+              <Text text="16">{item}</Text>
             </TouchableOpacity>
           )
         }}
