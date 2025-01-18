@@ -2,11 +2,7 @@
 import { StyleValue, StyleObject, Pattern } from '../types/types'
 
 const parseSpacingValue = (value: string): StyleValue => {
-  if (/^-?\d+(\.\d+)?dp$/.test(value)) {
-    return Number(value.replace('dp', ''))
-  }
-
-  if (/^-?\d+(\.\d+)?(%|vw|vh)$/.test(value)) {
+  if (/^-?\d+(\.\d+)?(?:dp|%|vw|vh)$/.test(value)) {
     return value
   }
 
@@ -16,9 +12,9 @@ const parseSpacingValue = (value: string): StyleValue => {
   }
 
   return value
- }
+}
 
- const handleSpacingValues = (value: string): Record<string, StyleValue> => {
+const handleSpacingValues = (value: string): Record<string, StyleValue> => {
   const styles: Record<string, StyleValue> = {}
   const parts = value.trim().split(/\s+/)
 
@@ -51,10 +47,10 @@ const parseSpacingValue = (value: string): StyleValue => {
   })
 
   return Object.keys(styles).length ? styles : { all: parseSpacingValue(value) }
- }
+}
 
- const spacing: Pattern[] = [
-  [/^p="([^"]+)"$/, ([_, value]): StyleObject => {
+const spacing: Pattern[] = [
+  ['p', ([_, value]): StyleObject => {
     const spacings = handleSpacingValues(value)
     const styles: StyleObject = {}
 
@@ -68,7 +64,7 @@ const parseSpacingValue = (value: string): StyleValue => {
     return styles
   }],
 
-  [/^m="([^"]+)"$/, ([_, value]): StyleObject => {
+  ['m', ([_, value]): StyleObject => {
     const spacings = handleSpacingValues(value)
     const styles: StyleObject = {}
 
@@ -82,31 +78,31 @@ const parseSpacingValue = (value: string): StyleValue => {
     return styles
   }],
 
-  [/^pt="([^"]+)"$/, ([_, value]): StyleObject => ({ paddingTop: parseSpacingValue(value) })],
-  [/^pr="([^"]+)"$/, ([_, value]): StyleObject => ({ paddingRight: parseSpacingValue(value) })],
-  [/^pb="([^"]+)"$/, ([_, value]): StyleObject => ({ paddingBottom: parseSpacingValue(value) })],
-  [/^pl="([^"]+)"$/, ([_, value]): StyleObject => ({ paddingLeft: parseSpacingValue(value) })],
-  [/^px="([^"]+)"$/, ([_, value]): StyleObject => ({
+  ['pt', ([_, value]): StyleObject => ({ paddingTop: parseSpacingValue(value) })],
+  ['pr', ([_, value]): StyleObject => ({ paddingRight: parseSpacingValue(value) })],
+  ['pb', ([_, value]): StyleObject => ({ paddingBottom: parseSpacingValue(value) })],
+  ['pl', ([_, value]): StyleObject => ({ paddingLeft: parseSpacingValue(value) })],
+  ['px', ([_, value]): StyleObject => ({
     paddingLeft: parseSpacingValue(value),
     paddingRight: parseSpacingValue(value)
   })],
-  [/^py="([^"]+)"$/, ([_, value]): StyleObject => ({
+  ['py', ([_, value]): StyleObject => ({
     paddingTop: parseSpacingValue(value),
     paddingBottom: parseSpacingValue(value)
   })],
 
-  [/^mt="([^"]+)"$/, ([_, value]): StyleObject => ({ marginTop: parseSpacingValue(value) })],
-  [/^mr="([^"]+)"$/, ([_, value]): StyleObject => ({ marginRight: parseSpacingValue(value) })],
-  [/^mb="([^"]+)"$/, ([_, value]): StyleObject => ({ marginBottom: parseSpacingValue(value) })],
-  [/^ml="([^"]+)"$/, ([_, value]): StyleObject => ({ marginLeft: parseSpacingValue(value) })],
-  [/^mx="([^"]+)"$/, ([_, value]): StyleObject => ({
+  ['mt', ([_, value]): StyleObject => ({ marginTop: parseSpacingValue(value) })],
+  ['mr', ([_, value]): StyleObject => ({ marginRight: parseSpacingValue(value) })],
+  ['mb', ([_, value]): StyleObject => ({ marginBottom: parseSpacingValue(value) })],
+  ['ml', ([_, value]): StyleObject => ({ marginLeft: parseSpacingValue(value) })],
+  ['mx', ([_, value]): StyleObject => ({
     marginLeft: parseSpacingValue(value),
     marginRight: parseSpacingValue(value)
   })],
-  [/^my="([^"]+)"$/, ([_, value]): StyleObject => ({
+  ['my', ([_, value]): StyleObject => ({
     marginTop: parseSpacingValue(value),
     marginBottom: parseSpacingValue(value)
   })]
- ]
+]
 
- export default spacing
+export default spacing
