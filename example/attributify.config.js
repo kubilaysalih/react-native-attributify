@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
-require('ts-node/register/transpile-only')
-const { nativePreset } = require('../presets/index.ts')
+const { nativePreset } = require('../dist/presets/index.js')
 
 const config = {
   presets: [nativePreset()]

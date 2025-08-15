@@ -214,7 +214,71 @@ const borders: Pattern[] = [
   ...borderStyles.map(style => ([
     `b-${style}`,
     { borderStyle: style }
-  ])) as Pattern[]
+  ])) as Pattern[],
+
+  // Border radius patterns
+  [/^r-(\d+(?:\.\d+)?)$/, ([_, value]): StyleObject => {
+    const radius = Number(value)
+    return { borderRadius: radius }
+  }],
+
+  [/^r(\d+(?:\.\d+)?)$/, ([_, value]): StyleObject => {
+    const radius = Number(value)
+    return { borderRadius: radius }
+  }],
+
+  // Corner-specific radius patterns
+  [/^r([trbl])-(\d+(?:\.\d+)?)$/, ([_, corner, value]): StyleObject => {
+    const radius = Number(value)
+    const styles: StyleObject = {}
+
+    switch (corner) {
+      case 't':
+        styles.borderTopLeftRadius = radius
+        styles.borderTopRightRadius = radius
+        break
+      case 'r':
+        styles.borderTopRightRadius = radius
+        styles.borderBottomRightRadius = radius
+        break
+      case 'b':
+        styles.borderBottomLeftRadius = radius
+        styles.borderBottomRightRadius = radius
+        break
+      case 'l':
+        styles.borderTopLeftRadius = radius
+        styles.borderBottomLeftRadius = radius
+        break
+    }
+
+    return styles
+  }],
+
+  [/^r([trbl])(\d+(?:\.\d+)?)$/, ([_, corner, value]): StyleObject => {
+    const radius = Number(value)
+    const styles: StyleObject = {}
+
+    switch (corner) {
+      case 't':
+        styles.borderTopLeftRadius = radius
+        styles.borderTopRightRadius = radius
+        break
+      case 'r':
+        styles.borderTopRightRadius = radius
+        styles.borderBottomRightRadius = radius
+        break
+      case 'b':
+        styles.borderBottomLeftRadius = radius
+        styles.borderBottomRightRadius = radius
+        break
+      case 'l':
+        styles.borderTopLeftRadius = radius
+        styles.borderBottomLeftRadius = radius
+        break
+    }
+
+    return styles
+  }]
 ]
 
 export default borders

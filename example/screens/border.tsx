@@ -111,7 +111,7 @@ export default function BorderScreen() {
           </Text>
           <View bg="#f5f5f5" p="16">
             <View flex-row flex-wrap>
-              <View b="2 dashed #4a90e2" r-8 bg="white" p="16" m="4">
+              <View b="2 dashed #4a90e2" r="8"  bg="white" p="16" m="4">
                 <Text>b="2 dashed #4a90e2" r-8</Text>
               </View>
               <View bt="2 solid red" bb="2 solid blue" bg="white" p="16" m="4">

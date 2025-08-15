@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
-require('ts-node/register/transpile-only')
-
-const attributifyPlugin = require('../index.ts')
+const attributifyPlugin = require('../dist/index.js')
 
 module.exports = function (api) {
   api.cache(true)
