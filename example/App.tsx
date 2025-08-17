@@ -4,6 +4,7 @@ import { FlatList, View, Text, TouchableOpacity } from 'react-native'
 import FlexScreen from './screens/flex'
 import AlignScreen from './screens/align'
 import TextScreen from './screens/text'
+import FontScreen from './screens/font'
 import BorderScreen from './screens/border'
 import PositionScreen from './screens/position'
 import SpacingScreen from './screens/spacing'
@@ -15,6 +16,7 @@ type RootStackParamList = {
   Flex: undefined;
   Align: undefined;
   Text: undefined;
+  Font: undefined;
   Border: undefined
   Position: undefined
   Spacing: undefined
@@ -26,7 +28,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>()
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>
 
-const screens = ['Flex', 'Align', 'Text', 'Border', 'Position', 'Spacing', 'Size', 'Transform'] as const
+const screens = ['Flex', 'Align', 'Text', 'Font', 'Border', 'Position', 'Spacing', 'Size', 'Transform'] as const
 
 type ScreenName = typeof screens[number]
 
@@ -69,6 +71,7 @@ const App = () => {
         <Stack.Screen name="Flex" component={FlexScreen} />
         <Stack.Screen name="Align" component={AlignScreen} />
         <Stack.Screen name="Text" component={TextScreen} />
+        <Stack.Screen name="Font" component={FontScreen} />
         <Stack.Screen name="Border" component={BorderScreen} />
         <Stack.Screen name="Position" component={PositionScreen} />
         <Stack.Screen name="Spacing" component={SpacingScreen} />
