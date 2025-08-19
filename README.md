@@ -146,7 +146,6 @@ React Native specific utilities:
 ```tsx
 <View
   bg="white"           // Background color
-  rounded="lg"         // Border radius
   opacity="75"         // Opacity
 />
 ```
@@ -197,8 +196,6 @@ React Native specific utilities:
   border="1"            // Border width
   border="2 dashed"     // Border style
   border="1 solid red"  // Full border
-  rounded="lg"          // Border radius
-  rounded="t-lg"        // Top radius
 />
 ```
 
@@ -221,7 +218,6 @@ React Native specific utilities:
   flex="1 center"
   bg="white"
   p="4"
-  rounded="lg"
   border="1 solid gray-200"
 >
   <Text
@@ -243,7 +239,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'white',
     padding: 16,
-    borderRadius: 8,
     borderWidth: 1,
     borderStyle: 'solid',
     borderColor: '#E5E7EB'
@@ -272,7 +267,6 @@ function ProfileCard() {
     <View
       flex="1"
       bg="white"
-      rounded="xl"
       p="4"
       border="1 solid gray-200"
       shadow="lg"
@@ -280,7 +274,6 @@ function ProfileCard() {
       <Image
         source={require('./avatar.png')}
         size="100"
-        rounded="full"
         border="2 solid blue-500"
       />
 
@@ -300,7 +293,6 @@ function ProfileCard() {
       <TouchableOpacity
         bg="blue-500"
         p="y-2 x-4"
-        rounded="lg"
         mt="4"
       >
         <Text text="white center">
@@ -351,7 +343,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#3B82F6',
     paddingVertical: 8,
     paddingHorizontal: 16,
-    borderRadius: 8,
     marginTop: 16
   },
   buttonText: {

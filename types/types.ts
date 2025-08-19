@@ -15,9 +15,17 @@ export type PatternHandler = StyleObject | StyleGenerator
 
 export type Pattern = [string | RegExp, StyleObject | ((match: any) => StyleObject)]
 
+export interface ThemeConfig {
+  [key: string]: any
+}
+
 export interface AttributifyConfig {
   presets: Array<Pattern[] | (() => Pattern[])>
   prefix: string
+  themes?: {
+    [themeName: string]: ThemeConfig
+  }
+  defaultTheme?: string
 }
 
 export type StyleHandler = StyleObject | ((match: any) => StyleObject)

@@ -2,11 +2,12 @@ import { NodePath, types as t } from '@babel/core'
 import { processTemplateLiteral } from './templateLiteralProcessor'
 import { processConditionalExpression } from './conditionalExpressionProcessor'
 import { manageStyleAttribute } from './styleAttributeManager'
-import { processAttributes } from './processAttributes'
+import { processAttributes, processThemeAwareAttributes } from './processAttributes'
 import { generateStyleHash } from './generateStyleHash'
 import { Pattern, StyleObject } from '../types/types'
 import { findConditionalAttributes } from './findConditionalAttributes'
 import { getElementInfo } from './getElementInfo'
+import { hasThemeVariants } from './themeProcessor'
 
 export const processJSXElements = (
   path: NodePath<t.Program>,
@@ -66,18 +67,76 @@ export const processJSXElements = (
         }
       }
 
-      const newStyles = processAttributes(attributes, types, patterns)
-      if (!newStyles) return
+      // Check if any attributes have theme variants
+      const hasThemeAttributes = attributes.some(attr => {
+        if (!types.isJSXAttribute(attr) || !types.isJSXIdentifier(attr.name)) return false
 
-      const styleId = generateStyleHash(newStyles, prefix)
-      styles[styleId] = newStyles
+        let value: string | null = null
+        if (attr.value) {
+          if (types.isStringLiteral(attr.value)) {
+            value = attr.value.value
+          } else if (types.isJSXExpressionContainer(attr.value) &&
+                     types.isStringLiteral(attr.value.expression)) {
+            value = attr.value.expression.value
+          }
+        }
 
-      const styleExpr = types.memberExpression(
-        types.identifier(styleSheetName),
-        types.identifier(styleId)
-      )
+        return value ? hasThemeVariants(value) : false
+      })
 
-      manageStyleAttribute(attributes, styleExpr, types, openingElement)
+      if (hasThemeAttributes) {
+        // Process theme-aware attributes
+        const { styles: staticStyles, conditionalStyles } = processThemeAwareAttributes(
+          attributes,
+          types,
+          patterns
+        )
+
+        // Create a function that returns dynamic styles based on theme
+        const styleProperties: t.ObjectProperty[] = []
+
+        // Add static styles
+        Object.entries(staticStyles).forEach(([key, value]) => {
+          styleProperties.push(
+            types.objectProperty(
+              types.identifier(key),
+              typeof value === 'string'
+                ? types.stringLiteral(value)
+                : types.numericLiteral(value as number)
+            )
+          )
+        })
+
+        // Add conditional styles that depend on theme
+        Object.entries(conditionalStyles).forEach(([key, expression]) => {
+          styleProperties.push(
+            types.objectProperty(
+              types.identifier(key),
+              expression
+            )
+          )
+        })
+
+        if (styleProperties.length > 0) {
+          // Create a dynamic style object that will be evaluated at runtime
+          const dynamicStyleExpr = types.objectExpression(styleProperties)
+          manageStyleAttribute(attributes, dynamicStyleExpr, types, openingElement)
+        }
+      } else {
+        // Process normally without theme awareness
+        const newStyles = processAttributes(attributes, types, patterns)
+        if (!newStyles) return
+
+        const styleId = generateStyleHash(newStyles, prefix)
+        styles[styleId] = newStyles
+
+        const styleExpr = types.memberExpression(
+          types.identifier(styleSheetName),
+          types.identifier(styleId)
+        )
+
+        manageStyleAttribute(attributes, styleExpr, types, openingElement)
+      }
     }
   })
 }

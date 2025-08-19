@@ -1,17 +1,12 @@
 {
   "name": "react-native-attributify",
-  "version": "0.1.0-alpha.12",
+  "version": "0.1.0-alpha.13",
   "description": "react-native-attributify like nativewind and unocss with attributes",
   "main": "dist/index.ts",
   "types": "dist/index.d.ts",
   "author": "kubilay salih",
   "license": "MIT",
   "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "require": "./dist/index.js",
-      "import": "./dist/index.mjs"
-    },
     "./presets": {
       "types": "./dist/presets/index.d.ts",
       "require": "./dist/presets/index.js"
@@ -27,6 +22,11 @@
     "./babel": {
       "types": "./dist/index.d.ts",
       "require": "./dist/index.js"
+    },
+    "./theme": {
+      "types": "./dist/providers/ThemeProvider.d.ts",
+      "require": "./dist/providers/ThemeProvider.js",
+      "default": "./dist/providers/ThemeProvider.js"
     }
   },
   "repository": {
@@ -52,6 +52,10 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\""
   },
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "react-native": ">=0.75.5"
+  },
   "devDependencies": {
     "@babel/core": "^7.26.0",
     "@babel/types": "^7.26.3",
@@ -59,6 +63,7 @@
     "@types/babel__core": "^7.20.5",
     "@types/jest": "^29.5.14",
     "@types/node": "^22.10.2",
+    "@types/react": "^18.0.0",
     "@typescript-eslint/eslint-plugin": "^8.18.2",
     "@typescript-eslint/parser": "^8.18.2",
     "eslint": "^9.17.0",

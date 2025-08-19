@@ -4,7 +4,9 @@ import { AttributifyConfig, Pattern } from './types/types'
 
 const defaultConfig: Required<AttributifyConfig> = {
   prefix: 'attr_',
-  presets: [] as (Pattern[] | (() => Pattern[]))[]
+  presets: [] as (Pattern[] | (() => Pattern[]))[],
+  themes: {},
+  defaultTheme: 'default'
 }
 
 let cachedConfig: Required<AttributifyConfig> | null = null
@@ -33,7 +35,9 @@ export function loadConfig(cwd: string): Required<AttributifyConfig> {
 
       cachedConfig = {
         prefix: userConfig.prefix || defaultConfig.prefix,
-        presets: processPresets(userConfig.presets)
+        presets: processPresets(userConfig.presets),
+        themes: userConfig.themes || defaultConfig.themes,
+        defaultTheme: userConfig.defaultTheme || defaultConfig.defaultTheme
       }
 
       return cachedConfig

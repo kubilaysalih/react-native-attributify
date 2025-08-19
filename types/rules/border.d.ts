@@ -20,13 +20,6 @@ export interface BorderStyle {
   'border-b'?: BorderPropValue
   'border-l'?: BorderPropValue
 
-  rd?: BorderPropValue
-  'border-radius'?: BorderPropValue
-  'rounded-t'?: BorderPropValue
-  'rounded-r'?: BorderPropValue
-  'rounded-b'?: BorderPropValue
-  'rounded-l'?: BorderPropValue
-
   // Border radius patterns - dynamic values supported
   r?: BorderPropValue
   [key: `r-${number}`]: BorderPropValue

@@ -10,15 +10,15 @@ export interface FontStyle {
   'font-weight'?: FontWeightValue
   'font-style'?: FontStyleValue
   'font-family'?: FontFamilyValue
-  'font'?: string
-  'font-thin'?: boolean
-  'font-extralight'?: boolean
-  'font-light'?: boolean
-  'font-normal'?: boolean
-  'font-medium'?: boolean
-  'font-semibold'?: boolean
-  'font-bold'?: boolean
-  'font-extrabold'?: boolean
-  'font-black'?: boolean
-  'font-italic'?: boolean
+  'font'?: FontWeightValue | FontStyleValue | string
+  'font-thin'?: ''
+  'font-extralight'?: ''
+  'font-light'?: ''
+  'font-normal'?: ''
+  'font-medium'?: ''
+  'font-semibold'?: ''
+  'font-bold'?: ''
+  'font-extrabold'?: ''
+  'font-black'?: ''
+  'font-italic'?: ''
 }
