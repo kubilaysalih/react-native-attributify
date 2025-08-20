@@ -1,12 +1,17 @@
 {
   "name": "react-native-attributify",
-  "version": "0.1.0-alpha.15",
+  "version": "0.1.0-alpha.16",
   "description": "react-native-attributify like nativewind and unocss with attributes",
   "main": "dist/index.ts",
   "types": "dist/index.d.ts",
   "author": "kubilay salih",
   "license": "MIT",
   "exports": {
+    ".": {
+      "types": "./dist/providers/ThemeProvider.d.ts",
+      "require": "./dist/providers/ThemeProvider.js",
+      "default": "./dist/providers/ThemeProvider.js"
+    },
     "./presets": {
       "types": "./dist/presets/index.d.ts",
       "require": "./dist/presets/index.js"
@@ -22,11 +27,6 @@
     "./babel": {
       "types": "./dist/index.d.ts",
       "require": "./dist/index.js"
-    },
-    "./theme": {
-      "types": "./dist/providers/ThemeProvider.d.ts",
-      "require": "./dist/providers/ThemeProvider.js",
-      "default": "./dist/providers/ThemeProvider.js"
     }
   },
   "repository": {

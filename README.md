@@ -25,6 +25,9 @@ This project draws inspiration from several innovative projects:
 - 💪 Auto-Completion
 - 🎨 Style Composition
 - 📦 Multiple Presets
+- 🌙 Theme System with Dark Mode
+- 🎨 Theme Variables & Design Tokens
+- 🔄 Automatic Theme Switching
 
 ### Style Categories
 - Flexbox & Layout
@@ -33,6 +36,7 @@ This project draws inspiration from several innovative projects:
 - Typography
 - Borders & Shadows
 - Position & Display
+- Theme Variants
 - And more...
 
 ## Installation
@@ -113,15 +117,50 @@ module.exports = config;
   - `nativePreset`: Core React Native styles
   - `layoutPreset`: Flexbox and layout utilities
 
-#### Example with Multiple Presets
+#### `themes`
+- Type: `Object`
+- Default: `{}`
+- Description: Theme configuration with custom color palettes and design tokens
+
+#### `defaultTheme`
+- Type: `string`
+- Default: `'default'`
+- Description: Default theme to use when no theme is specified
+
+#### Example with Theme Configuration
 ```ts
-const { nativePreset, layoutPreset } = require('react-native-attributify/presets');
+const { nativePreset } = require('react-native-attributify/presets');
 
 const config = {
   prefix: 'myapp_',
-  presets: [
-    nativePreset()
-  ]
+  presets: [nativePreset()],
+
+  // Theme configuration
+  themes: {
+    light: {
+      colors: {
+        primary: '#3B82F6',
+        secondary: '#6B7280',
+        background: '#FFFFFF',
+        surface: '#F9FAFB',
+        text: '#111827',
+        border: '#E5E7EB'
+      }
+    },
+    dark: {
+      colors: {
+        primary: '#60A5FA',
+        secondary: '#9CA3AF',
+        background: '#111827',
+        surface: '#1F2937',
+        text: '#F9FAFB',
+        border: '#374151'
+      }
+    }
+  },
+
+  // Default theme
+  defaultTheme: 'light'
 };
 
 module.exports = config;
@@ -148,6 +187,140 @@ React Native specific utilities:
   bg="white"           // Background color
   opacity="75"         // Opacity
 />
+```
+
+## Theme System
+
+React Native Attributify includes a powerful theme system that allows you to create consistent design systems with automatic theme switching.
+
+### Theme Setup
+
+First, configure your themes in `attributify.config.js`:
+
+```ts
+const { nativePreset } = require('react-native-attributify/presets');
+
+const config = {
+  prefix: 'myapp_',
+  presets: [nativePreset()],
+
+  themes: {
+    light: {
+      colors: {
+        primary: '#3B82F6',
+        secondary: '#6B7280',
+        background: '#FFFFFF',
+        surface: '#F9FAFB',
+        text: '#111827',
+        border: '#E5E7EB'
+      }
+    },
+    dark: {
+      colors: {
+        primary: '#60A5FA',
+        secondary: '#9CA3AF',
+        background: '#111827',
+        surface: '#1F2937',
+        text: '#F9FAFB',
+        border: '#374151'
+      }
+    }
+  },
+
+  defaultTheme: 'light'
+};
+
+module.exports = config;
+```
+
+### ThemeProvider Setup
+
+Wrap your app with the ThemeProvider:
+
+```tsx
+import React from 'react';
+import { ThemeProvider } from 'react-native-attributify/theme';
+import App from './App';
+
+export default function Root() {
+  return (
+    <ThemeProvider defaultTheme="light" themes={['light', 'dark']}>
+      <App />
+    </ThemeProvider>
+  );
+}
+```
+
+### Theme Variants
+
+Use theme variants with the `theme:value` syntax:
+
+```tsx
+<View
+  bg="white dark:black"           // White in light, black in dark
+  border="gray-200 dark:gray-700" // Different borders per theme
+>
+  <Text color="black dark:white">
+    This text adapts to the theme
+  </Text>
+</View>
+```
+
+### Theme Variables
+
+Use theme variables defined in your config:
+
+```tsx
+<View
+  bg="background"        // Uses theme.colors.background
+  border="border"        // Uses theme.colors.border
+>
+  <Text color="text">    {/* Uses theme.colors.text */}
+    Themed content
+  </Text>
+
+  <TouchableOpacity bg="primary"> {/* Uses theme.colors.primary */}
+    <Text color="white">Button</Text>
+  </TouchableOpacity>
+</View>
+```
+
+### Theme Switching
+
+Use the `useTheme` hook to control themes:
+
+```tsx
+import { useTheme } from 'react-native-attributify/theme';
+
+function ThemeToggle() {
+  const { theme, setTheme } = useTheme();
+
+  return (
+    <TouchableOpacity
+      bg="primary"
+      p="3"
+      onPress={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+    >
+      <Text color="white">
+        Switch to {theme === 'dark' ? 'Light' : 'Dark'} Theme
+      </Text>
+    </TouchableOpacity>
+  );
+}
+```
+
+### Automatic Compilation
+
+Theme variants are automatically compiled to conditional expressions:
+
+```tsx
+// Write this:
+<View bg="white dark:black" />
+
+// Compiles to:
+<View style={{
+  backgroundColor: theme === 'dark' ? 'black' : 'white'
+}} />
 ```
 
 ## Style Categories
@@ -379,10 +552,12 @@ const styles = StyleSheet.create({
 
 ### Core Features
 - [ ] Unistyles Support ???
-- [ ] Custom Theme Support
+- [x] Custom Theme Support
+- [x] Theme Variables & Design Tokens
+- [x] Dark Mode Support
+- [x] Automatic Theme Switching
 - [ ] Style Variants
 - [ ] Responsive Styles
-- [ ] Dark Mode Support
 - [ ] VS Code Extension
 - [ ] Better Documentation
 
