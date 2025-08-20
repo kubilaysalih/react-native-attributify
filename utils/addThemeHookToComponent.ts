@@ -25,14 +25,23 @@ export const addThemeHookToComponent = (
   const hasThemeHook = body.body.some(statement => {
     if (types.isVariableDeclaration(statement)) {
       return statement.declarations.some(declarator => {
-        if (types.isVariableDeclarator(declarator) &&
-            types.isObjectPattern(declarator.id)) {
-          return declarator.id.properties.some(prop => {
-            if (types.isObjectProperty(prop) && types.isIdentifier(prop.key)) {
-              return prop.key.name === 'theme'
-            }
-            return false
-          })
+        if (types.isVariableDeclarator(declarator) && declarator.init) {
+          // Check if the init is a call to useTheme()
+          if (types.isCallExpression(declarator.init) &&
+              types.isIdentifier(declarator.init.callee) &&
+              declarator.init.callee.name === 'useTheme') {
+            return true
+          }
+
+          // Also check for destructured theme variable
+          if (types.isObjectPattern(declarator.id)) {
+            return declarator.id.properties.some(prop => {
+              if (types.isObjectProperty(prop) && types.isIdentifier(prop.key)) {
+                return prop.key.name === 'theme'
+              }
+              return false
+            })
+          }
         }
         return false
       })
