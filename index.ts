@@ -8,6 +8,7 @@ import { initializePatterns } from './utils/initializePatterns'
 import { ensureStyleSheetImport } from './utils/ensureStyleSheetImport'
 import { ensureThemeImport } from './utils/ensureThemeImport'
 import { addThemeHookToComponent } from './utils/addThemeHookToComponent'
+import { checkIfComponentUsesThemeProvider } from './utils/checkIfComponentUsesThemeProvider'
 import { processJSXElements } from './utils/processJSXElements'
 import { hasThemeVariants } from './utils/themeProcessor'
 
@@ -57,18 +58,29 @@ export default function (): PluginObj {
           ensureThemeImport(path, t)
 
           // Add useTheme hook call at the beginning of the component
+          // but skip components that use ThemeProvider
           path.traverse({
             FunctionDeclaration(funcPath) {
               if (funcPath.node.id && funcPath.node.id.name &&
                   funcPath.node.id.name.match(/^[A-Z]/)) { // Component function
-                addThemeHookToComponent(funcPath, t)
+
+                // Check if this component uses ThemeProvider
+                const usesThemeProvider = checkIfComponentUsesThemeProvider(funcPath, t)
+                if (!usesThemeProvider) {
+                  addThemeHookToComponent(funcPath, t)
+                }
               }
             },
             ArrowFunctionExpression(funcPath) {
               const parent = funcPath.parent
               if (t.isVariableDeclarator(parent) && t.isIdentifier(parent.id) &&
                   parent.id.name.match(/^[A-Z]/)) { // Component arrow function
-                addThemeHookToComponent(funcPath, t)
+
+                // Check if this component uses ThemeProvider
+                const usesThemeProvider = checkIfComponentUsesThemeProvider(funcPath, t)
+                if (!usesThemeProvider) {
+                  addThemeHookToComponent(funcPath, t)
+                }
               }
             }
           })
