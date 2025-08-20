@@ -239,7 +239,7 @@ Wrap your app with the ThemeProvider:
 
 ```tsx
 import React from 'react';
-import { ThemeProvider } from 'react-native-attributify/theme';
+import { ThemeProvider } from 'react-native-attributify';
 import App from './App';
 
 export default function Root() {
@@ -290,7 +290,7 @@ Use theme variables defined in your config:
 Use the `useTheme` hook to control themes:
 
 ```tsx
-import { useTheme } from 'react-native-attributify/theme';
+import { useTheme } from 'react-native-attributify';
 
 function ThemeToggle() {
   const { theme, setTheme } = useTheme();
