@@ -137,15 +137,51 @@ export const processJSXElements = (
         const newStyles = processAttributes(attributes, types, patterns)
         if (!newStyles) return
 
-        const styleId = generateStyleHash(newStyles, prefix)
-        styles[styleId] = newStyles
-
-        const styleExpr = types.memberExpression(
-          types.identifier(styleSheetName),
-          types.identifier(styleId)
+        // Check if any styles contain variable expressions
+        const hasVariables = Object.values(newStyles).some(value =>
+          value && typeof value === 'object' && 'type' in value
         )
 
-        manageStyleAttribute(attributes, styleExpr, types, openingElement)
+        if (hasVariables) {
+          // Handle dynamic styles with variables
+          const styleProperties: t.ObjectProperty[] = []
+
+          Object.entries(newStyles).forEach(([key, value]) => {
+            if (value && typeof value === 'object' && 'type' in value) {
+              // This is a variable expression
+              styleProperties.push(
+                types.objectProperty(
+                  types.identifier(key),
+                  value as t.Expression
+                )
+              )
+            } else {
+              // This is a static value
+              styleProperties.push(
+                types.objectProperty(
+                  types.identifier(key),
+                  typeof value === 'string'
+                    ? types.stringLiteral(value)
+                    : types.numericLiteral(value as number)
+                )
+              )
+            }
+          })
+
+          const dynamicStyleExpr = types.objectExpression(styleProperties)
+          manageStyleAttribute(attributes, dynamicStyleExpr, types, openingElement)
+        } else {
+          // Handle static styles normally
+          const styleId = generateStyleHash(newStyles, prefix)
+          styles[styleId] = newStyles
+
+          const styleExpr = types.memberExpression(
+            types.identifier(styleSheetName),
+            types.identifier(styleId)
+          )
+
+          manageStyleAttribute(attributes, styleExpr, types, openingElement)
+        }
       }
     }
   })

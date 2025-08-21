@@ -21,6 +21,7 @@ export const processThemeAwareAttributes = (
 
     const name = attr.name.name
     let value: string | null = null
+    let variableExpression: t.Expression | null = null
 
     if (attr.value) {
       if (types.isStringLiteral(attr.value)) {
@@ -31,8 +32,9 @@ export const processThemeAwareAttributes = (
         } else if (types.isNumericLiteral(attr.value.expression)) {
           value = attr.value.expression.value.toString()
         } else if (types.isIdentifier(attr.value.expression)) {
-          // Handle variables - we can't resolve them at compile time, so skip processing
-          continue
+          // Handle variables - store the variable expression for later use
+          variableExpression = attr.value.expression
+          value = '__VARIABLE__' // Special marker to indicate this is a variable
         }
       }
     }
@@ -167,33 +169,63 @@ export const processThemeAwareAttributes = (
       for (const [matcher, handler] of patterns) {
         if (typeof matcher === 'string') {
           if (name === matcher) {
-            // Resolve theme variables for non-theme-variant values
-            const resolvedValue = value ? resolveThemeVariable(value, 'light') : ''
+            if (variableExpression) {
+              // Handle variable expressions - create conditional styles using the variable
+              const style = typeof handler === 'function'
+                ? handler([name, '']) // Pass empty string to get the style structure
+                : handler
 
-            const style = typeof handler === 'function'
-              ? handler([name, resolvedValue])
-              : handler
+              // For each style property, use the variable expression
+              Object.keys(style).forEach(styleKey => {
+                conditionalStyles[styleKey] = variableExpression
+              })
+            } else {
+              // Resolve theme variables for non-theme-variant values
+              const resolvedValue = value ? resolveThemeVariable(value, 'light') : ''
 
-            Object.assign(newStyles, style)
+              const style = typeof handler === 'function'
+                ? handler([name, resolvedValue])
+                : handler
+
+              Object.assign(newStyles, style)
+            }
             processedAttrs.add(attr)
           }
         } else if (matcher instanceof RegExp) {
-          const testString = value ? `${name}="${value}"` : name
-          const match = testString.match(matcher)
+          if (variableExpression) {
+            // For regex patterns with variables, we need to check if the pattern matches the attribute name
+            const testString = name
+            const match = testString.match(matcher)
 
-          if (match) {
-            // For regex matches, resolve theme variables in the matched value
-            const resolvedMatch = match.map((m, index) => {
-              if (index === 0) return m // Keep the full match as is
-              return m ? resolveThemeVariable(m, 'light') : m
-            })
+            if (match) {
+              const style = typeof handler === 'function'
+                ? handler([name, '']) // Pass empty string to get the style structure
+                : handler
 
-            const style = typeof handler === 'function'
-              ? handler(resolvedMatch)
-              : handler
+              // For each style property, use the variable expression
+              Object.keys(style).forEach(styleKey => {
+                conditionalStyles[styleKey] = variableExpression
+              })
+              processedAttrs.add(attr)
+            }
+          } else {
+            const testString = value ? `${name}="${value}"` : name
+            const match = testString.match(matcher)
 
-            Object.assign(newStyles, style)
-            processedAttrs.add(attr)
+            if (match) {
+              // For regex matches, resolve theme variables in the matched value
+              const resolvedMatch = match.map((m, index) => {
+                if (index === 0) return m // Keep the full match as is
+                return m ? resolveThemeVariable(m, 'light') : m
+              })
+
+              const style = typeof handler === 'function'
+                ? handler(resolvedMatch)
+                : handler
+
+              Object.assign(newStyles, style)
+              processedAttrs.add(attr)
+            }
           }
         }
       }
@@ -225,6 +257,7 @@ export const processAttributes = (
 
     const name = attr.name.name
     let value: string | null = null
+    let variableExpression: t.Expression | null = null
 
     if (attr.value) {
       if (types.isStringLiteral(attr.value)) {
@@ -235,8 +268,9 @@ export const processAttributes = (
         } else if (types.isNumericLiteral(attr.value.expression)) {
           value = attr.value.expression.value.toString()
         } else if (types.isIdentifier(attr.value.expression)) {
-          // Handle variables - we can't resolve them at compile time, so skip processing
-          continue
+          // Handle variables - store the variable expression for later use
+          variableExpression = attr.value.expression
+          value = '__VARIABLE__' // Special marker to indicate this is a variable
         }
       }
     }
@@ -244,33 +278,64 @@ export const processAttributes = (
     for (const [matcher, handler] of patterns) {
       if (typeof matcher === 'string') {
         if (name === matcher) {
-          // Resolve theme variables for non-theme-variant values
-          const resolvedValue = value ? resolveThemeVariable(value, 'light') : ''
+          if (variableExpression) {
+            // Handle variable expressions - return the variable as a dynamic style
+            const style = typeof handler === 'function'
+              ? handler([name, '']) // Pass empty string to get the style structure
+              : handler
 
-          const style = typeof handler === 'function'
-            ? handler([name, resolvedValue])
-            : handler
+            // For variables in non-theme-aware context, we need to return the variable expression
+            // This will be handled by the calling function to create dynamic styles
+            Object.keys(style).forEach(styleKey => {
+              newStyles[styleKey] = variableExpression as t.Expression // Store the variable expression
+            })
+          } else {
+            // Resolve theme variables for non-theme-variant values
+            const resolvedValue = value ? resolveThemeVariable(value, 'light') : ''
 
-          Object.assign(newStyles, style)
+            const style = typeof handler === 'function'
+              ? handler([name, resolvedValue])
+              : handler
+
+            Object.assign(newStyles, style)
+          }
           processedAttrs.add(attr)
         }
       } else if (matcher instanceof RegExp) {
-        const testString = value ? `${name}="${value}"` : name
-        const match = testString.match(matcher)
+        if (variableExpression) {
+          // For regex patterns with variables, check if the pattern matches the attribute name
+          const testString = name
+          const match = testString.match(matcher)
 
-        if (match) {
-          // For regex matches, resolve theme variables in the matched value
-          const resolvedMatch = match.map((m, index) => {
-            if (index === 0) return m // Keep the full match as is
-            return m ? resolveThemeVariable(m, 'light') : m
-          })
+          if (match) {
+            const style = typeof handler === 'function'
+              ? handler([name, '']) // Pass empty string to get the style structure
+              : handler
 
-          const style = typeof handler === 'function'
-            ? handler(resolvedMatch)
-            : handler
+            // For variables, store the variable expression
+            Object.keys(style).forEach(styleKey => {
+              newStyles[styleKey] = variableExpression as t.Expression
+            })
+            processedAttrs.add(attr)
+          }
+        } else {
+          const testString = value ? `${name}="${value}"` : name
+          const match = testString.match(matcher)
 
-          Object.assign(newStyles, style)
-          processedAttrs.add(attr)
+          if (match) {
+            // For regex matches, resolve theme variables in the matched value
+            const resolvedMatch = match.map((m, index) => {
+              if (index === 0) return m // Keep the full match as is
+              return m ? resolveThemeVariable(m, 'light') : m
+            })
+
+            const style = typeof handler === 'function'
+              ? handler(resolvedMatch)
+              : handler
+
+            Object.assign(newStyles, style)
+            processedAttrs.add(attr)
+          }
         }
       }
     }

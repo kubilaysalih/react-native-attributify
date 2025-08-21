@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { types as t } from '@babel/core'
 
-export type StyleValueType = string | number | Array<any>
+export type StyleValueType = string | number | Array<any> | t.Expression
 
 export interface StyleObject {
   [key: string]: StyleValueType
