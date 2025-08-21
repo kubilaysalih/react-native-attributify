@@ -11,7 +11,7 @@ export interface AlignStyle {
   'text-end'?: boolean
   'text-align'?: TextAlignValue
   'vertical-align'?: VerticalAlignValue
-  align?: VerticalAlignValue
+  align?: string
   vertical?: VerticalAlignValue
   v?: VerticalAlignValue
 }

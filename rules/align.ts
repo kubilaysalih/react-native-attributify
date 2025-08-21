@@ -1,38 +1,40 @@
-import { Pattern } from '../types/types'
+import { Pattern, StyleObject } from '../types/types'
 
-export const textAlignValues = ['center', 'left', 'right', 'justify', 'start', 'end'] as const
+const parseAlignStyle = (value: string): StyleObject => {
+  const parts = value.split(' ')
+  const styles: StyleObject = {}
 
-export const isTextAlignValue = (value: string): boolean => {
-  return textAlignValues.includes(value as typeof textAlignValues[number])
-}
+  parts.forEach((part) => {
+    // Text alignment
+    if (['left', 'center', 'right', 'justify'].includes(part)) {
+      styles.textAlign = part
+      return
+    }
 
-const verticalAlignAlias: Record<string, string> = {
-  'mid': 'middle',
-  'base': 'baseline',
-  'btm': 'bottom',
-  'baseline': 'baseline',
-  'top': 'top',
-  'start': 'top',
-  'middle': 'middle',
-  'bottom': 'bottom',
-  'end': 'bottom',
-  'text-top': 'text-top',
-  'text-bottom': 'text-bottom',
-  'sub': 'sub',
-  'super': 'super'
+    // Flex alignment (items)
+    if (['flex-start', 'flex-end', 'center', 'stretch', 'baseline'].includes(part)) {
+      styles.alignItems = part
+      return
+    }
+
+    // Self alignment
+    if (part.startsWith('self-')) {
+      const selfAlign = part.replace('self-', '')
+      if (['auto', 'flex-start', 'flex-end', 'center', 'stretch', 'baseline'].includes(selfAlign)) {
+        styles.alignSelf = selfAlign
+      }
+      return
+    }
+  })
+
+  return styles
 }
 
 const align: Pattern[] = [
-  ['text-center', { textAlign: 'center' }],
-  ['text-left', { textAlign: 'left' }],
-  ['text-right', { textAlign: 'right' }],
-  ['text-justify', { textAlign: 'justify' }],
-  ['text-start', { textAlign: 'start' }],
-  ['text-end', { textAlign: 'end' }],
-
-  [/^(?:vertical|align|v)-([a-z-]+)$/, ([, v]) => ({
-    verticalAlign: verticalAlignAlias[v] || v
-  })]
+  ['align', ([, value]): StyleObject => {
+    if (!value) return {}
+    return parseAlignStyle(value)
+  }]
 ]
 
 export default align

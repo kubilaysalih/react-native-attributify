@@ -21,35 +21,50 @@ export const addThemeHookToComponent = (
     return
   }
 
-  // Check if useTheme hook is already called
-  const hasThemeHook = body.body.some(statement => {
+  // Check if useTheme hook is already called and if theme is destructured
+  let existingUseThemeStatement = null
+  let hasThemeVariable = false
+
+  body.body.forEach(statement => {
     if (types.isVariableDeclaration(statement)) {
-      return statement.declarations.some(declarator => {
+      statement.declarations.forEach(declarator => {
         if (types.isVariableDeclarator(declarator) && declarator.init) {
           // Check if the init is a call to useTheme()
           if (types.isCallExpression(declarator.init) &&
               types.isIdentifier(declarator.init.callee) &&
               declarator.init.callee.name === 'useTheme') {
-            return true
-          }
+            existingUseThemeStatement = statement
 
-          // Also check for destructured theme variable
-          if (types.isObjectPattern(declarator.id)) {
-            return declarator.id.properties.some(prop => {
-              if (types.isObjectProperty(prop) && types.isIdentifier(prop.key)) {
-                return prop.key.name === 'theme'
-              }
-              return false
-            })
+            // Check if theme is already destructured
+            if (types.isObjectPattern(declarator.id)) {
+              hasThemeVariable = declarator.id.properties.some(prop => {
+                if (types.isObjectProperty(prop) && types.isIdentifier(prop.key)) {
+                  return prop.key.name === 'theme'
+                }
+                return false
+              })
+            }
           }
         }
-        return false
       })
     }
-    return false
   })
 
-  if (!hasThemeHook) {
+  if (existingUseThemeStatement && !hasThemeVariable) {
+    // Add theme to existing useTheme destructuring
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const declaration = existingUseThemeStatement as any
+    const declarator = declaration.declarations[0]
+    if (types.isVariableDeclarator(declarator) && types.isObjectPattern(declarator.id)) {
+      // Add theme property to existing destructuring
+      declarator.id.properties.push(
+        types.objectProperty(
+          types.identifier('theme'),
+          types.identifier('theme')
+        )
+      )
+    }
+  } else if (!existingUseThemeStatement) {
     // Add const { theme } = useTheme() at the beginning of the component
     const themeHookCall = types.variableDeclaration('const', [
       types.variableDeclarator(
