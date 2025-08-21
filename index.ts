@@ -10,7 +10,7 @@ import { ensureThemeImport } from './utils/ensureThemeImport'
 import { addThemeHookToComponent } from './utils/addThemeHookToComponent'
 import { checkIfComponentUsesThemeProvider } from './utils/checkIfComponentUsesThemeProvider'
 import { processJSXElements } from './utils/processJSXElements'
-import { hasThemeVariants } from './utils/themeProcessor'
+import { hasThemeVariants, shouldUseAutoThemeVariants } from './utils/themeProcessor'
 
 export default function (): PluginObj {
   const config = loadConfig(process.cwd())
@@ -47,7 +47,7 @@ export default function (): PluginObj {
               }
             }
 
-            if (value && hasThemeVariants(value)) {
+            if (value && (hasThemeVariants(value) || shouldUseAutoThemeVariants(value, config))) {
               hasThemeVariantsInFile = true
             }
           }
@@ -86,7 +86,7 @@ export default function (): PluginObj {
           })
         }
 
-        processJSXElements(path, patterns, styles, styleSheetName, t, prefix)
+        processJSXElements(path, patterns, styles, styleSheetName, t, prefix, config)
 
         if (Object.keys(styles).length > 0) {
           const styleSheet = generateStyleSheet(styles, styleSheetName, t)

@@ -138,10 +138,7 @@ export const processThemeAwareAttributes = (
                 conditionalExpr = types.conditionalExpression(
                   types.binaryExpression(
                     '===',
-                    types.memberExpression(
-                      types.identifier('theme'),
-                      types.identifier('name')
-                    ),
+                    types.identifier('theme'),
                     types.stringLiteral(variant.theme)
                   ),
                   typeof themeValue === 'string'

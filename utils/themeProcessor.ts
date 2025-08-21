@@ -69,17 +69,14 @@ export function generateThemeConditionalExpression(
   for (let i = 1; i < sortedVariants.length; i++) {
     const variant = sortedVariants[i]
 
-    // Create condition: theme.name === 'themeName'
+    // Create condition: theme === 'themeName'
     const condition = types.binaryExpression(
       '===',
-      types.memberExpression(
-        types.identifier('theme'),
-        types.identifier('name')
-      ),
+      types.identifier('theme'),
       types.stringLiteral(variant.theme)
     )
 
-    // Create conditional: theme.name === 'themeName' ? themeValue : previousExpression
+    // Create conditional: theme === 'themeName' ? themeValue : previousExpression
     conditionalExpr = types.conditionalExpression(
       condition,
       types.stringLiteral(variant.value),
