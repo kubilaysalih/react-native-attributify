@@ -4,10 +4,10 @@ import { processConditionalExpression } from './conditionalExpressionProcessor'
 import { manageStyleAttribute } from './styleAttributeManager'
 import { processAttributes, processThemeAwareAttributes } from './processAttributes'
 import { generateStyleHash } from './generateStyleHash'
-import { Pattern, StyleObject } from '../types/types'
+import { Pattern, StyleObject, AttributifyConfig } from '../types/types'
 import { findConditionalAttributes } from './findConditionalAttributes'
 import { getElementInfo } from './getElementInfo'
-import { hasThemeVariants } from './themeProcessor'
+import { hasThemeVariants, shouldUseAutoThemeVariants } from './themeProcessor'
 
 export const processJSXElements = (
   path: NodePath<t.Program>,
@@ -15,7 +15,8 @@ export const processJSXElements = (
   styles: Record<string, StyleObject>,
   styleSheetName: string,
   types: typeof t,
-  prefix: string
+  prefix: string,
+  config?: AttributifyConfig
 ): void => {
   path.traverse({
     JSXElement(elementPath: NodePath<t.JSXElement>) {
@@ -67,7 +68,7 @@ export const processJSXElements = (
         }
       }
 
-      // Check if any attributes have theme variants
+      // Check if any attributes have theme variants or automatic theme variants
       const hasThemeAttributes = attributes.some(attr => {
         if (!types.isJSXAttribute(attr) || !types.isJSXIdentifier(attr.name)) return false
 
@@ -81,7 +82,15 @@ export const processJSXElements = (
           }
         }
 
-        return value ? hasThemeVariants(value) : false
+        if (!value) return false
+
+        // Check for explicit theme variants (dark:value syntax)
+        if (hasThemeVariants(value)) return true
+
+        // Check for automatic theme variants (values that exist in multiple themes)
+        if (config && shouldUseAutoThemeVariants(value, config)) return true
+
+        return false
       })
 
       if (hasThemeAttributes) {
@@ -89,7 +98,8 @@ export const processJSXElements = (
         const { styles: staticStyles, conditionalStyles } = processThemeAwareAttributes(
           attributes,
           types,
-          patterns
+          patterns,
+          config
         )
 
         // Create a function that returns dynamic styles based on theme

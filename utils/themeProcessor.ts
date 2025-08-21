@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { StyleObject } from '../types/types'
+import { StyleObject, AttributifyConfig } from '../types/types'
+import { detectAutoThemeVariants } from './autoThemeVariantDetector'
 
 export interface ThemeVariant {
   theme: string
@@ -55,22 +56,61 @@ export function generateThemeConditionalExpression(
 ): any {
   if (themeVariants.length === 0) return null
 
-  // For now, we'll focus on dark/light theme support
-  const lightVariant = themeVariants.find(v => v.theme === 'light' || v.theme === 'default')
-  const darkVariant = themeVariants.find(v => v.theme === 'dark')
+  // Sort variants to prioritize default theme first
+  const sortedVariants = [...themeVariants].sort((a, b) => {
+    if (a.theme === 'default') return -1
+    if (b.theme === 'default') return 1
+    return 0
+  })
 
-  if (!lightVariant && !darkVariant) return null
+  // Build nested conditional expressions for multiple themes
+  let conditionalExpr = types.stringLiteral(sortedVariants[0].value)
 
-  const lightValue = lightVariant?.value || ''
-  const darkValue = darkVariant?.value || lightValue
+  for (let i = 1; i < sortedVariants.length; i++) {
+    const variant = sortedVariants[i]
 
-  // Create conditional expression: isDark ? darkValue : lightValue
-  return types.conditionalExpression(
-    types.memberExpression(
-      types.identifier('theme'),
-      types.identifier('isDark')
-    ),
-    types.stringLiteral(darkValue),
-    types.stringLiteral(lightValue)
-  )
+    // Create condition: theme.name === 'themeName'
+    const condition = types.binaryExpression(
+      '===',
+      types.memberExpression(
+        types.identifier('theme'),
+        types.identifier('name')
+      ),
+      types.stringLiteral(variant.theme)
+    )
+
+    // Create conditional: theme.name === 'themeName' ? themeValue : previousExpression
+    conditionalExpr = types.conditionalExpression(
+      condition,
+      types.stringLiteral(variant.value),
+      conditionalExpr
+    )
+  }
+
+  return conditionalExpr
+}
+
+/**
+ * Processes a value and automatically generates theme variants if the value exists in multiple themes
+ */
+export function processAutoThemeVariants(
+  value: string,
+  config: AttributifyConfig,
+  types: any
+): any | null {
+  const autoVariants = detectAutoThemeVariants(value, config)
+
+  if (!autoVariants.hasMultipleThemes) {
+    return null
+  }
+
+  return generateThemeConditionalExpression(autoVariants.variants, '', types)
+}
+
+/**
+ * Checks if a value should be processed with automatic theme variants
+ */
+export function shouldUseAutoThemeVariants(value: string, config: AttributifyConfig): boolean {
+  const autoVariants = detectAutoThemeVariants(value, config)
+  return autoVariants.hasMultipleThemes
 }
