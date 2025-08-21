@@ -30,6 +30,9 @@ export const processThemeAwareAttributes = (
           value = attr.value.expression.value
         } else if (types.isNumericLiteral(attr.value.expression)) {
           value = attr.value.expression.value.toString()
+        } else if (types.isIdentifier(attr.value.expression)) {
+          // Handle variables - we can't resolve them at compile time, so skip processing
+          continue
         }
       }
     }
@@ -231,6 +234,9 @@ export const processAttributes = (
           value = attr.value.expression.value
         } else if (types.isNumericLiteral(attr.value.expression)) {
           value = attr.value.expression.value.toString()
+        } else if (types.isIdentifier(attr.value.expression)) {
+          // Handle variables - we can't resolve them at compile time, so skip processing
+          continue
         }
       }
     }
