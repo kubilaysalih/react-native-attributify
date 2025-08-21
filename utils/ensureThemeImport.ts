@@ -18,7 +18,7 @@ export const ensureThemeImport = (path: NodePath<t.Program>, types: typeof t): v
     // Add import { useTheme } from 'react-native-attributify/theme'
     const themeImport = types.importDeclaration(
       [types.importSpecifier(types.identifier('useTheme'), types.identifier('useTheme'))],
-      types.stringLiteral('react-native-attributify/theme')
+      types.stringLiteral('react-native-attributify')
     )
 
     // Find the last import statement
