@@ -1,6 +1,6 @@
 {
   "name": "react-native-attributify",
-  "version": "0.1.0-alpha.18",
+  "version": "0.1.0-alpha.19",
   "description": "react-native-attributify like nativewind and unocss with attributes",
   "main": "dist/providers/ThemeProvider.js",
   "types": "dist/providers/ThemeProvider.d.ts",
@@ -9,6 +9,7 @@
   "exports": {
     ".": {
       "types": "./dist/providers/ThemeProvider.d.ts",
+      "import": "./dist/providers/ThemeProvider.js",
       "require": "./dist/providers/ThemeProvider.js",
       "default": "./dist/providers/ThemeProvider.js"
     },
