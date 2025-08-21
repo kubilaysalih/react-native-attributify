@@ -2,15 +2,20 @@
 import { StyleValue, StyleObject, Pattern } from '../types/types'
 
 const parseSpacingValue = (value: string): StyleValue => {
-  if (/^-?\d+(\.\d+)?(?:dp|%|vw|vh)$/.test(value)) {
+  // Handle units like dp, %, vw, vh - keep as string
+  if (/^-?\d+(\.\d+)?(?:dp|%|vw|vh|px|em|rem)$/.test(value)) {
     return value
   }
 
-  const num = Number(value)
-  if (!isNaN(num)) {
-    return num
+  // Handle pure numbers - convert to number
+  if (/^-?\d+(\.\d+)?$/.test(value)) {
+    const num = Number(value)
+    if (!isNaN(num)) {
+      return num
+    }
   }
 
+  // Handle 'auto', 'inherit', etc. - keep as string
   return value
 }
 

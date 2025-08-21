@@ -25,9 +25,12 @@ export const processThemeAwareAttributes = (
     if (attr.value) {
       if (types.isStringLiteral(attr.value)) {
         value = attr.value.value
-      } else if (types.isJSXExpressionContainer(attr.value) &&
-                 types.isStringLiteral(attr.value.expression)) {
-        value = attr.value.expression.value
+      } else if (types.isJSXExpressionContainer(attr.value)) {
+        if (types.isStringLiteral(attr.value.expression)) {
+          value = attr.value.expression.value
+        } else if (types.isNumericLiteral(attr.value.expression)) {
+          value = attr.value.expression.value.toString()
+        }
       }
     }
 
@@ -223,9 +226,12 @@ export const processAttributes = (
     if (attr.value) {
       if (types.isStringLiteral(attr.value)) {
         value = attr.value.value
-      } else if (types.isJSXExpressionContainer(attr.value) &&
-                 types.isStringLiteral(attr.value.expression)) {
-        value = attr.value.expression.value
+      } else if (types.isJSXExpressionContainer(attr.value)) {
+        if (types.isStringLiteral(attr.value.expression)) {
+          value = attr.value.expression.value
+        } else if (types.isNumericLiteral(attr.value.expression)) {
+          value = attr.value.expression.value.toString()
+        }
       }
     }
 
