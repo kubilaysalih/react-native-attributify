@@ -105,8 +105,11 @@ export const processThemeAwareAttributes = (
       for (const [matcher, handler] of patterns) {
         if (typeof matcher === 'string') {
           if (name === matcher) {
+            // Resolve theme variables for non-theme-variant values
+            const resolvedValue = value ? resolveThemeVariable(value, 'light') : ''
+
             const style = typeof handler === 'function'
-              ? handler([name, value || ''])
+              ? handler([name, resolvedValue])
               : handler
 
             Object.assign(newStyles, style)
@@ -117,8 +120,14 @@ export const processThemeAwareAttributes = (
           const match = testString.match(matcher)
 
           if (match) {
+            // For regex matches, resolve theme variables in the matched value
+            const resolvedMatch = match.map((m, index) => {
+              if (index === 0) return m // Keep the full match as is
+              return m ? resolveThemeVariable(m, 'light') : m
+            })
+
             const style = typeof handler === 'function'
-              ? handler(match)
+              ? handler(resolvedMatch)
               : handler
 
             Object.assign(newStyles, style)
@@ -167,8 +176,11 @@ export const processAttributes = (
     for (const [matcher, handler] of patterns) {
       if (typeof matcher === 'string') {
         if (name === matcher) {
+          // Resolve theme variables for non-theme-variant values
+          const resolvedValue = value ? resolveThemeVariable(value, 'light') : ''
+
           const style = typeof handler === 'function'
-            ? handler([name, value || ''])
+            ? handler([name, resolvedValue])
             : handler
 
           Object.assign(newStyles, style)
@@ -179,8 +191,14 @@ export const processAttributes = (
         const match = testString.match(matcher)
 
         if (match) {
+          // For regex matches, resolve theme variables in the matched value
+          const resolvedMatch = match.map((m, index) => {
+            if (index === 0) return m // Keep the full match as is
+            return m ? resolveThemeVariable(m, 'light') : m
+          })
+
           const style = typeof handler === 'function'
-            ? handler(match)
+            ? handler(resolvedMatch)
             : handler
 
           Object.assign(newStyles, style)
